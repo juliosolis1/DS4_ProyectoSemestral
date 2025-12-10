@@ -1,0 +1,324 @@
+﻿@model POS_FeriaUniversitaria.AccesoDatos.Entidades.Producto
+
+@{
+    ViewBag.Title = "Editar Producto";
+}
+
+@*
+    Vista: Edit (Editar Producto)
+    Esta vista permite actualizar un producto existente del inventario.
+    Se reutiliza el mismo layout visual que en la vista Create para
+    mantener coherencia y orden en la interfaz.
+*@
+
+<style>
+    /* Contenedor principal de la tarjeta del formulario */
+    .producto-form-wrapper {
+        max-width: 950px;
+        margin: 0 auto 40px;
+        background-color: #ffffff;
+        padding: 25px 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Título centrado */
+    .producto-form-title {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    /* Texto introductorio centrado y color suave */
+    .producto-form-intro {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #6c757d;
+    }
+
+    /* Filas de dos columnas (Nombre/Descripción, Precio/Stock) */
+    .producto-form-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        margin-bottom: 20px;
+    }
+
+    /* Cada columna de la fila */
+    .producto-form-col {
+        flex: 1 1 0;
+        min-width: 260px;
+
+        /* Columna como contenedor flex vertical */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Etiquetas por encima del control */
+    .producto-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 6px;
+        text-align: center;
+    }
+
+    /* Cuadros dentro de cada columna: centrados y más angostos */
+    .producto-form-col .form-control {
+        width: auto;
+        max-width: 320px;
+        margin: 0 auto;
+    }
+
+    /* Inputs numéricos un poco más pequeños */
+    .producto-form-col .producto-input-numero {
+        width: auto;
+        max-width: 120px; /* aquí fuerzas que sean más pequeñitos */
+    }
+
+    /* Mensajes de validación del lado del cliente */
+    .text-danger {
+        font-size: 0.9rem;
+    }
+
+    /* Sección de imagen centrada */
+    .producto-imagen-section {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .producto-imagen-section .producto-label {
+        margin-bottom: 10px;
+    }
+
+    /* Cuadro de vista previa de la imagen */
+    .producto-imagen-preview {
+        width: 240px;
+        height: 200px;
+        border: 2px dashed #ced4da;
+        border-radius: 8px;
+        margin: 0 auto 12px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8f9fa;
+        overflow: hidden;
+    }
+
+    .producto-imagen-preview img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+
+    .producto-imagen-placeholder {
+        color: #999999;
+        font-size: 0.9rem;
+    }
+
+    /* Input file centrado y con ancho razonable */
+    .producto-input-file {
+        max-width: 260px;
+        margin: 0 auto;
+    }
+
+    /* Texto de ayuda de la imagen centrado */
+    .producto-imagen-help {
+        margin-top: 8px;
+        font-size: 0.9rem;
+        color: #6c757d;
+        text-align: center;
+    }
+
+    /* Sección del checkbox "Activo" centrada */
+    .producto-activo-section {
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .producto-activo-checkbox {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 4px;
+    }
+
+    /* Contenedor de botones centrado */
+    .producto-form-buttons {
+        text-align: center;
+        margin-top: 25px;
+    }
+
+    .producto-form-buttons .btn {
+        min-width: 150px;
+        margin: 0 8px;
+    }
+</style>
+
+<h2 class="producto-form-title">Editar Producto</h2>
+
+<p class="producto-form-intro">
+    Actualiza la información del producto registrado en el inventario
+    de la feria universitaria.
+</p>
+
+@using (Html.BeginForm("Edit", "Productos", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.ProductoId)
+    @Html.HiddenFor(m => m.ImagenPortada)
+
+    <div class="producto-form-wrapper">
+        @* Resumen de errores de validación del modelo *@
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @* Fila 1: Nombre del producto (izquierda) y Descripción (centro) *@
+        <div class="producto-form-row">
+            <!-- Columna: Nombre del producto -->
+            <div class="producto-form-col">
+                @Html.LabelFor(m => m.Nombre, htmlAttributes: new { @class = "producto-label" })
+                @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
+            </div>
+
+            <!-- Columna: Descripción -->
+            <div class="producto-form-col">
+                @Html.LabelFor(m => m.Descripcion, htmlAttributes: new { @class = "producto-label" })
+                @Html.TextAreaFor(
+                    m => m.Descripcion,
+                    new { @class = "form-control", rows = 3 }
+                )
+                @Html.ValidationMessageFor(m => m.Descripcion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @* Fila 2: Precio de venta (izquierda) y Stock disponible (centro) *@
+        <div class="producto-form-row">
+            <!-- Columna: Precio de venta -->
+            <div class="producto-form-col">
+                @Html.LabelFor(m => m.PrecioVenta, htmlAttributes: new { @class = "producto-label" })
+                @Html.TextBoxFor(
+                    m => m.PrecioVenta,
+                    new
+                    {
+                        @class = "form-control producto-input-numero",
+                        type = "number",
+                        step = "0.01",
+                        min = "0"
+                    }
+                )
+                @Html.ValidationMessageFor(m => m.PrecioVenta, "", new { @class = "text-danger" })
+            </div>
+
+            <!-- Columna: Stock disponible -->
+            <div class="producto-form-col">
+                @Html.LabelFor(m => m.Stock, htmlAttributes: new { @class = "producto-label" })
+                @Html.TextBoxFor(
+                    m => m.Stock,
+                    new
+                    {
+                        @class = "form-control producto-input-numero",
+                        type = "number",
+                        min = "0"
+                    }
+                )
+                @Html.ValidationMessageFor(m => m.Stock, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @* Sección: Imagen del producto (opcional) *@
+        @{
+            bool tieneImagen = !string.IsNullOrEmpty(Model.ImagenPortada);
+        }
+
+        <div class="producto-imagen-section">
+            <span class="producto-label">Imagen del producto (opcional)</span>
+
+            <!-- Cuadro de vista previa de la imagen (actual o nueva) -->
+            <div class="producto-imagen-preview" id="previewContainerEdit">
+                <span id="previewPlaceholderEdit"
+                      class="producto-imagen-placeholder"
+                      style="@(tieneImagen ? "display:none;" : "display:block;")">
+                    Sin imagen seleccionada
+                </span>
+
+                <img id="previewImageEdit"
+                     src="@(tieneImagen ? Url.Content(Model.ImagenPortada) : "#")"
+                     alt="Vista previa de la imagen del producto"
+                     style="@(tieneImagen ? "display:block;" : "display:none;")" />
+            </div>
+
+            <!-- Input para seleccionar el archivo de imagen -->
+            <div class="producto-input-file">
+                <input type="file"
+                       id="imagenPortadaEdit"
+                       name="imagenPortada"
+                       accept="image/*"
+                       class="form-control" />
+            </div>
+
+            <p class="producto-imagen-help">
+                Si no seleccionas un archivo, se mantendrá la imagen actual. Máximo 10 MB.
+            </p>
+
+            @Html.ValidationMessage("ImagenPortada", "", new { @class = "text-danger" })
+        </div>
+
+        @* Sección: checkbox para indicar si el producto está activo *@
+        <div class="producto-activo-section">
+            <span class="producto-label">Activo</span>
+            <div class="producto-activo-checkbox">
+                @Html.CheckBoxFor(m => m.Activo)
+                <span>@Html.DisplayNameFor(m => m.Activo)</span>
+            </div>
+        </div>
+
+        @* Botones de acción: centrados *@
+        <div class="producto-form-buttons">
+            <input type="submit" value="Guardar cambios" class="btn btn-primary" />
+            @Html.ActionLink(
+                "Volver al listado",
+                "Index",
+                null,
+                new { @class = "btn btn-default" }
+            )
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        // Script para mostrar una vista previa de la nueva imagen
+        // seleccionada en el input "imagenPortadaEdit" sin perder
+        // la imagen actual mientras no se elija archivo.
+        (function () {
+            var inputFile = document.getElementById("imagenPortadaEdit");
+            if (!inputFile) return;
+
+            var previewImage = document.getElementById("previewImageEdit");
+            var previewPlaceholder = document.getElementById("previewPlaceholderEdit");
+
+            inputFile.addEventListener("change", function () {
+                var file = this.files && this.files[0];
+
+                // Si el usuario no selecciona archivo, no cambiamos la vista previa:
+                // se mantiene la imagen actual o el placeholder.
+                if (!file) {
+                    return;
+                }
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = "block";
+                    previewPlaceholder.style.display = "none";
+                };
+
+                reader.readAsDataURL(file);
+            });
+        })();
+    </script>
+}

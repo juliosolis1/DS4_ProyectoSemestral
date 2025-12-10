@@ -1,0 +1,174 @@
+﻿@using POS_FeriaUniversitaria.Web.Models
+@model CarritoViewModel
+@{
+    ViewBag.Title = "Nueva Venta / Carrito";
+    var productos = ViewBag.Productos as IEnumerable<POS_FeriaUniversitaria.AccesoDatos.Entidades.Producto>;
+}
+
+<style>
+    /* FILA: selector de producto + cantidad + botón Agregar */
+    .venta-seleccion-row {
+        display: flex; /* todo en una sola fila */
+        justify-content: center; /* centrado horizontal */
+        align-items: center; /* alineado vertical */
+        gap: 12px; /* espacio entre los tres controles */
+        margin-top: 10px;
+        margin-bottom: 20px; /* espacio con la tabla del carrito */
+        flex-wrap: wrap; /* por si la pantalla es pequeña */
+    }
+
+        /* Ancho mínimo del combo de productos */
+        .venta-seleccion-row select[name="productoId"] {
+            min-width: 320px;
+        }
+
+        /* Ancho fijo del input de cantidad */
+        .venta-seleccion-row input[name="cantidad"] {
+            width: 100px;
+        }
+
+    /* BLOQUE: observaciones y botón Registrar Venta */
+    .venta-observaciones {
+        margin-top: 10px;
+    }
+
+        .venta-observaciones textarea {
+            width: 100%; /* que use todo el ancho disponible */
+            max-width: 100%;
+            min-height: 90px;
+        }
+
+        .venta-observaciones .btn-registrar-venta {
+            display: block;
+            margin: 15px auto 0 auto; /* centrado */
+            min-width: 180px;
+        }
+</style>
+
+<h2>Nueva Venta / Carrito</h2>
+
+@if (TempData["Ok"] != null)
+{
+    <div class="alert alert-success">@TempData["Ok"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">Agregar producto</div>
+    <div class="panel-body">
+        @using (Html.BeginForm("AgregarItem", "Ventas", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-inline venta-seleccion-row">
+                <select name="productoId" class="form-control">
+                    <option value="">-- Selecciona un producto --</option>
+                    @foreach (var p in productos)
+                    {
+                        <option value="@p.ProductoId">
+                            @p.Nombre (@p.Stock) - @p.PrecioVenta.ToString("C")
+                        </option>
+                    }
+                </select>
+
+                <input type="number"
+                       name="cantidad"
+                       min="1"
+                       value="1"
+                       class="form-control" />
+
+                <button type="submit" class="btn btn-success">
+                    Agregar
+                </button>
+            </div>
+        }
+    </div>
+</div>
+
+@if (Model.Items.Count == 0)
+{
+    <p><em>El carrito está vacío.</em></p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th style="width:120px;">Imagen</th>
+                <th>Producto</th>
+                <th style="width:120px;">Precio</th>
+                <th style="width:160px;">Cantidad</th>
+                <th style="width:140px;">Subtotal</th>
+                <th style="width:120px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in Model.Items)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(i.ImagenPortada))
+                        {
+                            <img src="@Url.Content(i.ImagenPortada)"
+                                 alt="Imagen de @i.Nombre"
+                                 style="max-width:80px; max-height:80px;" />
+                        }
+                        else
+                        {
+                            <span>Sin imagen</span>
+                        }
+                    </td>
+                    <td>@i.Nombre</td>
+                    <td>@i.PrecioUnitario.ToString("C")</td>
+                    <td>
+                        @using (Html.BeginForm("ActualizarCantidad", "Ventas", FormMethod.Post, new { @class = "form-inline" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="productoId" value="@i.ProductoId" />
+                            <input type="number" name="cantidad" min="1" value="@i.Cantidad" class="form-control" style="width:90px;" />
+                            <button type="submit" class="btn btn-default">Actualizar</button>
+                        }
+                    </td>
+                    <td>@i.Subtotal.ToString("C")</td>
+                    <td>
+                        @using (Html.BeginForm("QuitarItem", "Ventas", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="productoId" value="@i.ProductoId" />
+                            <button type="submit" class="btn btn-danger">Quitar</button>
+                        }
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="4" class="text-right">TOTAL</th>
+                <th>@Model.Total.ToString("C")</th>
+                <th></th>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            @using (Html.BeginForm("ConfirmarVenta", "Ventas", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="venta-observaciones">
+                    <textarea name="observaciones"
+                              class="form-control"
+                              placeholder="Observaciones (opcional)"></textarea>
+
+                    <button type="submit"
+                            class="btn btn-primary btn-registrar-venta">
+                        Registrar Venta
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+}

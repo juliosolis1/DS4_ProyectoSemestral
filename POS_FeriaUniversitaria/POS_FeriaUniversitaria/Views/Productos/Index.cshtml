@@ -1,0 +1,116 @@
+﻿@model IEnumerable<POS_FeriaUniversitaria.AccesoDatos.Entidades.Producto>
+
+@{
+    ViewBag.Title = "Productos";
+}
+
+<style>
+    /* Botón "Historial de productos": fondo celeste y texto blanco */
+    .btn-historial {
+        background-color: #00BCD4; /* puedes ajustar el tono si quieres */
+        border-color: #00A0B8;
+        color: #ffffff;
+    }
+
+        .btn-historial:hover {
+            background-color: #0097A7;
+            border-color: #008395;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+    /* Botón "Editar": amarillo con texto blanco */
+    .btn-editar {
+        background-color: #FFC107;
+        border-color: #E0A800;
+        color: #ffffff;
+        padding: 4px 10px;
+        border-radius: 4px;
+        display: inline-block;
+    }
+
+        .btn-editar:hover {
+            background-color: #E0A800;
+            border-color: #D39E00;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+    /* Botón "Eliminar": rojo con texto blanco */
+    .btn-eliminar {
+        background-color: #DC3545;
+        border-color: #C82333;
+        color: #ffffff;
+        padding: 4px 10px;
+        border-radius: 4px;
+        display: inline-block;
+    }
+
+        .btn-eliminar:hover {
+            background-color: #C82333;
+            border-color: #BD2130;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+    /* Contenedor para alinear y separar "Editar" / "Eliminar" */
+    .producto-acciones {
+        display: flex;
+        justify-content: center;
+        gap: 8px; /* espacio entre los dos botones */
+    }
+</style>
+
+
+<h2>Inventario de Productos</h2>
+
+<p>
+    @Html.ActionLink(
+    "Nuevo Producto",
+    "Create",
+    null,
+    new { @class = "btn btn-primary" }
+)
+
+    @Html.ActionLink(
+        "Historial de productos",
+        "Historial",
+        null,
+        new { @class = "btn btn-historial" }
+    )
+</p>
+
+<table class="table table-striped">
+    <tr>
+        <th>@Html.DisplayNameFor(m => m.Nombre)</th>
+        <th>@Html.DisplayNameFor(m => m.PrecioVenta)</th>
+        <th>@Html.DisplayNameFor(m => m.Stock)</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Nombre</td>
+            <td>@item.PrecioVenta.ToString("C")</td>
+            <td>@item.Stock</td>
+            <td>
+                <div class="producto-acciones">
+                    @Html.ActionLink(
+                        "Editar",
+                        "Edit",
+                        new { id = item.ProductoId },
+                        new { @class = "btn-editar" }
+                    )
+
+                    @Html.ActionLink(
+                        "Eliminar",
+                        "Delete",
+                        new { id = item.ProductoId },
+                        new { @class = "btn-eliminar" }
+                    )
+                </div>
+            </td>
+        </tr>
+    }
+</table>

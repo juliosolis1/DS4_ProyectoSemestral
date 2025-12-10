@@ -1,0 +1,9 @@
+C:\Users\jsass\source\repos\POS_FeriaUniversitaria\POS_FeriaUniversitaria.Servicios\bin\Debug\POS_FeriaUniversitaria.Servicios.dll
+C:\Users\jsass\source\repos\POS_FeriaUniversitaria\POS_FeriaUniversitaria.Servicios\bin\Debug\POS_FeriaUniversitaria.Servicios.pdb
+C:\Users\jsass\source\repos\POS_FeriaUniversitaria\POS_FeriaUniversitaria.Servicios\bin\Debug\POS_FeriaUniversitaria.AccesoDatos.dll
+C:\Users\jsass\source\repos\POS_FeriaUniversitaria\POS_FeriaUniversitaria.Servicios\bin\Debug\POS_FeriaUniversitaria.AccesoDatos.pdb
+C:\Users\jsass\source\repos\POS_FeriaUniversitaria\POS_FeriaUniversitaria.Servicios\obj\Debug\POS_FeriaUniversitaria.Servicios.csproj.AssemblyReference.cache
+C:\Users\jsass\source\repos\POS_FeriaUniversitaria\POS_FeriaUniversitaria.Servicios\obj\Debug\POS_FeriaUniversitaria.Servicios.csproj.CoreCompileInputs.cache
+C:\Users\jsass\source\repos\POS_FeriaUniversitaria\POS_FeriaUniversitaria.Servicios\obj\Debug\POS_Feri.659282DA.Up2Date
+C:\Users\jsass\source\repos\POS_FeriaUniversitaria\POS_FeriaUniversitaria.Servicios\obj\Debug\POS_FeriaUniversitaria.Servicios.dll
+C:\Users\jsass\source\repos\POS_FeriaUniversitaria\POS_FeriaUniversitaria.Servicios\obj\Debug\POS_FeriaUniversitaria.Servicios.pdb

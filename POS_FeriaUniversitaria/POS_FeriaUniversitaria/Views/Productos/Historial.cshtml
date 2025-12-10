@@ -1,0 +1,99 @@
+﻿﻿@model IEnumerable<POS_FeriaUniversitaria.AccesoDatos.Entidades.Producto>
+
+@{
+    ViewBag.Title = "Historial de productos";
+}
+
+<h2>Historial de productos</h2>
+<p class="text-muted">
+    Aquí se muestran los productos activos y los eliminados en los últimos 30 días.
+    Los productos inactivos con más de 30 días se eliminan automáticamente de la base de datos.
+</p>
+
+<p>
+    @Html.ActionLink("Volver al inventario", "Index", null, new { @class = "btn btn-default" })
+</p>
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>@Html.DisplayNameFor(m => m.Nombre)</th>
+        <th>@Html.DisplayNameFor(m => m.PrecioVenta)</th>
+        <th>@Html.DisplayNameFor(m => m.Stock)</th>
+        <th>Estado</th>
+        <th>Fecha de creación</th>
+        <th>Fecha de eliminación</th>
+        <th>Acciones</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Nombre</td>
+            <td>@item.PrecioVenta.ToString("C")</td>
+            <td>@item.Stock</td>
+            <td>
+                @*
+                    Lógica de estado del producto según stock y bandera Activo:
+                    - Eliminado      -> Activo == false
+                    - No disponible  -> Activo == true  y Stock <= 0
+                    - En inventario  -> Activo == true  y Stock > 0
+                *@
+                @if (!item.Activo)
+                {
+                    @:Eliminado
+                }
+                else if (item.Stock <= 0)
+                {
+                    @:No disponible
+                }
+                else
+                {
+                    @:En inventario
+                }
+            </td>
+            <td>@item.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</td>
+            <td>
+                @(item.FechaEliminacion.HasValue
+                    ? item.FechaEliminacion.Value.ToString("dd/MM/yyyy HH:mm")
+                    : "-")
+            </td>
+            <td>
+                @if (!item.Activo)
+                {
+                    @* Botón RESTAURAR al inventario *@
+                    using (Html.BeginForm("Restaurar", "Productos",
+                        new { id = item.ProductoId },
+                        FormMethod.Post,
+                        new { style = "display:inline-block;" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-success btn-xs">
+                            Restaurar al inventario
+                        </button>
+                    }
+
+                    @* Botón ELIMINAR DEFINITIVAMENTE *@
+                    using (Html.BeginForm("EliminarDefinitivo", "Productos",
+                        new { id = item.ProductoId },
+                        FormMethod.Post,
+                        new
+                        {
+                            style = "display:inline-block; margin-left:5px;",
+                            onsubmit = "return confirm('¿Desea eliminar definitivamente este producto? Esta acción no se puede deshacer.');"
+                        }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger btn-xs">
+                            Eliminar definitivamente
+                        </button>
+                    }
+                }
+                else
+                {
+                    @Html.ActionLink("Editar", "Edit", new { id = item.ProductoId },
+                        new { @class = "btn btn-link btn-xs" })
+                }
+            </td>
+        </tr>
+    }
+</table>

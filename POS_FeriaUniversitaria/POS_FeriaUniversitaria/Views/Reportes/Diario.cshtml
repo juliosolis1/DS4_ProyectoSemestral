@@ -1,0 +1,163 @@
+﻿@{
+    ViewBag.Title = "Reporte Diario";
+}
+
+@{
+    ViewBag.Title = "Reporte Diario";
+}
+
+<style>
+    /* Contenedor de la fecha del reporte diario */
+    .reporte-diario-fecha {
+        /* Coloca los elementos en una misma fila */
+        display: flex;
+        /* Centra horizontalmente el input y el botón */
+        justify-content: center;
+        /* Centra verticalmente por si cambian de tamaño */
+        align-items: center;
+        /* Espacio arriba y abajo del bloque */
+        margin: 20px 0;
+        /* Espacio entre el input y el botón (reemplaza el margin-left inline) */
+        gap: 10px;
+    }
+
+        /* Opcional: limita un poco el ancho del input de fecha */
+        .reporte-diario-fecha input[type="date"] {
+            max-width: 220px;
+        }
+
+    /* Tabla de detalle de productos en el reporte diario */
+    .tabla-detalle-productos th:first-child,
+    .tabla-detalle-productos td:first-child {
+        width: 90px; /* ancho fijo para la columna de imagen */
+        text-align: center;
+    }
+
+    .img-producto-reporte {
+        max-width: 80px;
+        max-height: 80px;
+        border-radius: 8px;
+        object-fit: cover; /* recorta la imagen manteniendo proporciones */
+        display: block;
+        margin: 0 auto; /* centrada en su celda */
+    }
+</style>
+
+<h2>Reporte Diario / Cierre de Caja</h2>
+
+<p>Selecciona la fecha para consultar el resumen de ventas.</p>
+
+<div class="form-inline reporte-diario-fecha">
+    <input type="date" id="fecha" class="form-control" />
+    <button id="btnBuscar" class="btn btn-primary">Consultar</button>
+</div>
+
+<hr />
+
+<div id="resultado">
+    <!-- Aquí se mostrará el resumen + detalle traído por la API -->
+    <p class="text-muted">Aún no se ha consultado ninguna fecha.</p>
+</div>
+
+@section Scripts {
+    <script>
+        // Maneja el clic del botón "Consultar"
+        document.getElementById("btnBuscar").addEventListener("click", function () {
+
+            var fecha = document.getElementById("fecha").value;
+
+            // Validación básica: obligar a seleccionar fecha
+            if (!fecha) {
+                alert("Por favor selecciona una fecha.");
+                return;
+            }
+
+            // Mensaje temporal mientras llega la respuesta
+            document.getElementById("resultado").innerHTML = "<p>Cargando reporte...</p>";
+
+            // Llamada a la API REST (capa API Rest del diagrama)
+            fetch('/api/reportes/diario?fecha=' + encodeURIComponent(fecha))
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+
+                    var html = "";
+
+                    // ================== SECCIÓN RESUMEN ==================
+                    html += "<h3>Resumen del " + data.fechaCierre + "</h3>";
+                    html += "<p><strong>Total de ventas:</strong> " + data.totalVentas + "</p>";
+                    html += "<p><strong>Cantidad de transacciones:</strong> " + data.cantidadTransacciones + "</p>";
+                    html += "<hr />";
+
+                    // ================== SECCIÓN DETALLE ==================
+                    html += "<h4>Detalle de ventas del día</h4>";
+
+                    // Si no hay ventas para la fecha seleccionada
+                    if (!data.ventas || data.ventas.length === 0) {
+                        html += "<p>No hay ventas registradas para esta fecha.</p>";
+                    } else {
+
+                        // Recorremos cada venta
+                        data.ventas.forEach(function (venta) {
+
+                            html += "<div style='margin-bottom:15px; padding:10px; border:1px solid #ddd; border-radius:4px;'>";
+
+                            // Cabecera de la venta
+                            html += "<h5>Venta #" + venta.VentaId +
+                                " &mdash; Total: <strong>" + venta.Total + "</strong></h5>";
+
+                            // Fecha/hora formateada en el navegador
+                            var fechaVenta = new Date(venta.Fecha);
+                            html += "<p><small>Fecha y hora: " + fechaVenta.toLocaleString() + "</small></p>";
+
+                            // Observaciones (si existen)
+                            if (venta.Observaciones) {
+                                html += "<p><em>Observaciones:</em> " + venta.Observaciones + "</p>";
+                            }
+
+                            // Tabla de productos de la venta
+                            html += "<table class='table table-striped table-condensed tabla-detalle-productos'>";
+                            html += "<thead><tr>" +
+                                "<th>Imagen</th>" +
+                                "<th>Producto</th>" +
+                                "<th class='text-center'>Cant.</th>" +
+                                "<th class='text-right'>P. Unitario</th>" +
+                                "<th class='text-right'>Subtotal</th>" +
+                                "</tr></thead><tbody>";
+
+                            // Recorremos los detalles de la venta
+                            venta.Detalles.forEach(function (det) {
+                                // Construimos la celda de la imagen: si no hay, mostramos "Sin imagen"
+                                var celdaImagen;
+                                if (det.ImagenPortada) {
+                                    celdaImagen =
+                                        "<img src='" + det.ImagenPortada + "' " +
+                                        "alt='Imagen de " + det.NombreProducto + "' " +
+                                        "class='img-producto-reporte' />";
+                                } else {
+                                    celdaImagen = "<span>Sin imagen</span>";
+                                }
+
+                                html += "<tr>" +
+                                    "<td>" + celdaImagen + "</td>" +
+                                    "<td>" + det.NombreProducto + "</td>" +
+                                    "<td class='text-center'>" + det.Cantidad + "</td>" +
+                                    "<td class='text-right'>" + det.PrecioUnitario + "</td>" +
+                                    "<td class='text-right'>" + det.Subtotal + "</td>" +
+                                    "</tr>";
+                            });
+
+                            html += "</tbody></table>";
+                            html += "</div>";
+                        });
+                    }
+
+                    // Insertamos todo el HTML generado en el div de resultado
+                    document.getElementById("resultado").innerHTML = html;
+                })
+                .catch(function (err) {
+                    console.error(err);
+                    alert("Error al consultar el reporte: " + err);
+                });
+        });
+    </script>
+}

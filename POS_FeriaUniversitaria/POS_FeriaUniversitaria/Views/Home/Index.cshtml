@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "Mini POS - Feria Universitaria";
+}
+<style>
+
+        /* Título dentro del banner */
+        .titulo-banner h2 {
+            margin: 0;
+            color: #691A5C;
+            font-weight: 600;
+        }
+
+    /* Texto que va debajo del banner */
+    .texto-subtitulo {
+        text-align: center;
+        margin-top: 25px;
+        margin-bottom: 25px;
+    }
+
+    /* Botones de los módulos (un poco más grandes) */
+    .opciones-modulos .btn {
+        font-size: 1.1rem;
+        padding: 15px 10px;
+        width: 100%; /* tipo btn-block */
+        color: #FFFFFF;
+    }
+</style>
+
+<!-- Banner morado a todo lo ancho, pegado al menú -->
+<div class="titulo-banner">
+    <h2>Mini POS - Feria Universitaria</h2>
+</div>
+
+<p class="texto-subtitulo">
+    Selecciona el módulo con el que deseas trabajar:
+</p>
+
+<div class="row opciones-modulos text-center">
+    <div class="col-md-4">
+        <a href="@Url.Action("Index", "Productos")" class="btn btn-primary">
+            Inventario (Productos)
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="@Url.Action("Nueva", "Ventas")" class="btn btn-success">
+            Nueva Venta / Carrito
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="@Url.Action("Diario", "Reportes")" class="btn btn-info">
+            Reporte Diario / Cierre de Caja
+        </a>
+    </div>
+</div>

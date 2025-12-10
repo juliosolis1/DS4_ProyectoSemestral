@@ -1,0 +1,31 @@
+﻿@model POS_FeriaUniversitaria.AccesoDatos.Entidades.Producto
+
+@{
+    ViewBag.Title = "Eliminar Producto";
+}
+
+<h2>Eliminar Producto</h2>
+
+<h3>¿Seguro que deseas eliminar este producto?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(m => m.Nombre)</dt>
+        <dd>@Html.DisplayFor(m => m.Nombre)</dd>
+
+        <dt>@Html.DisplayNameFor(m => m.PrecioVenta)</dt>
+        <dd>@Html.DisplayFor(m => m.PrecioVenta)</dd>
+
+        <dt>@Html.DisplayNameFor(m => m.Stock)</dt>
+        <dd>@Html.DisplayFor(m => m.Stock)</dd>
+    </dl>
+
+    @using (Html.BeginForm("Delete", "Productos", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.ProductoId)
+
+        <input type="submit" value="Eliminar" class="btn btn-danger" />
+        @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-default" })
+    }
+</div>

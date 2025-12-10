@@ -1,0 +1,65 @@
+﻿@{
+    // Título de la página
+    ViewBag.Title = ViewBag.Title ?? "Acerca de Mini POS - Feria Universitaria";
+}
+
+<main aria-labelledby="title" class="mt-4">
+    @* Encabezado principal de la página *@
+    <h2 id="title">@ViewBag.Title</h2>
+    <h4>@ViewBag.Message</h4>
+
+    <hr />
+
+    @* Sección: Descripción general del proyecto *@
+    <section class="mt-3">
+        <h3>Descripción del proyecto</h3>
+        <p>
+            <strong>Mini POS - Feria Universitaria</strong> es un proyecto semestral
+            desarrollado para la materia <strong>Desarrollo de Software IV</strong>.
+            El objetivo es construir una aplicación web tipo punto de venta (POS/Point Of Sales)
+            orientada a ferias universitarias, permitiendo gestionar de forma sencilla
+            el inventario, las ventas y el reporte diario de cierre de caja.
+        </p>
+
+        <p>
+            El sistema está construido utilizando <strong>ASP.NET MVC (.NET Framework)</strong>
+            y <strong>SQL Server</strong> como motor de base de datos, aplicando una arquitectura
+            por capas que separa el acceso a datos, la lógica de negocios (servicios) y la capa web.
+        </p>
+
+        <p>
+            El alcance principal del proyecto es:
+        </p>
+        <ul>
+            <li><strong>CRUD de productos</strong> para manejar el inventario de la feria.</li>
+            <li>Gestión de una <strong>nueva venta con carrito</strong> de productos.</li>
+            <li>Simulación de <strong>cierre de caja</strong> y generación del reporte diario de ventas.</li>
+            <li>Exposición de una <strong>API REST</strong> para la obtención de reportes.</li>
+        </ul>
+    </section>
+
+    <hr />
+
+    @* Sección: Información sobre el desarrollador *@
+    <section class="mt-3">
+        <h3>Sobre el desarrollador</h3>
+        <p>
+            El proyecto es desarrollado por <strong>Julio Solís</strong>, estudiante de la
+            carrera <strong>Licenciatura en Desarrollo y Gestión de Software</strong>
+            en la Universidad Tecnológica de Panamá (UTP).
+        </p>
+
+        <p>
+            Durante el desarrollo de este Mini POS se busca poner en práctica
+            conocimientos de desarrollo web con ASP.NET, diseño por capas,
+            integración con bases de datos SQL Server, consumo y exposición de APIs
+            y buenas prácticas de programación adquiridas a lo largo del semestre.
+        </p>
+
+        <p>
+            La finalidad académica del proyecto es demostrar la capacidad de analizar,
+            diseñar e implementar una solución web completa que resuelva una necesidad
+            real en el contexto de ferias universitarias.
+        </p>
+    </section>
+</main>
