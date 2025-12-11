@@ -12,91 +12,148 @@
 *@
 
 <style>
-    /* Contenedor principal de la tarjeta del formulario */
+    /* ================== FONDO GENERAL DE LA VISTA ================== */
+
+    .container.body-content {
+        max-width: 100% !important;
+        width: 100%;
+        margin: 0;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #3A0B33 0%, #691A5C 100%);
+        box-sizing: border-box;
+    }
+
+        /* Ocultamos la línea <hr /> del _Layout debajo del cuerpo */
+        .container.body-content > hr {
+            display: none;
+        }
+
+        /* Footer integrado como parte inferior blanca, pegado al recuadro */
+        .container.body-content > footer {
+            max-width: 950px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 0 0 24px 24px;
+            padding: 8px 0 12px 0;
+            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+    /* ================== TARJETA DEL FORMULARIO ================== */
+
     .producto-form-wrapper {
         max-width: 950px;
-        margin: 0 auto 40px;
+        margin: 0 auto; /* sin margen inferior para que pegue al footer */
         background-color: #ffffff;
-        padding: 25px 30px;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        padding: 26px 30px 28px 30px;
+        border-radius: 24px 24px 0 0;
+       /* box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);*/
     }
 
-    /* Título centrado */
+    .producto-form-header {
+        text-align: center;
+        margin-bottom: 18px;
+        border-bottom: 3px solid rgba(105, 26, 92, 0.1);
+        padding-bottom: 10px;
+    }
+
     .producto-form-title {
-        text-align: center;
-        margin-bottom: 10px;
+        font-size: 1.9rem;
+        font-weight: 700;
+        color: #691A5C;
+        margin: 0;
     }
 
-    /* Texto introductorio centrado y color suave */
     .producto-form-intro {
-        text-align: center;
-        margin-bottom: 25px;
+        margin: 6px 0 0 0;
         color: #6c757d;
+        font-size: 0.95rem;
     }
 
-    /* Filas de dos columnas (Nombre/Descripción, Precio/Stock) */
+    /* Resumen de validación */
+    .text-danger {
+        font-size: 0.9rem;
+    }
+
+    /* ================== LAYOUT DEL FORMULARIO ================== */
+
     .producto-form-row {
         display: flex;
         flex-wrap: wrap;
         gap: 24px;
         margin-bottom: 20px;
+        justify-content: center; /* centra las columnas dentro de la fila */
     }
 
-    /* Cada columna de la fila */
     .producto-form-col {
         flex: 1 1 0;
         min-width: 260px;
-
-        /* Columna como contenedor flex vertical */
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: center; /* títulos + campos centrados en cada columna */
     }
 
-    /* Etiquetas por encima del control */
     .producto-label {
         display: block;
         font-weight: 600;
         margin-bottom: 6px;
+        color: #4a4a4a;
         text-align: center;
     }
 
-    /* Cuadros dentro de cada columna: centrados y más angostos */
-    .producto-form-col .form-control {
-        width: auto;
-        max-width: 320px;
+    /* Controles generales del formulario */
+    .producto-form-wrapper .form-control {
+        border-radius: 10px;
+        border: 1px solid #ced4da;
+        box-shadow: none;
+        padding: 8px 10px;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        width: 100%;
+        max-width: 100%;
+    }
+
+        .producto-form-wrapper .form-control:focus {
+            border-color: #691A5C;
+            box-shadow: 0 0 0 0.16rem rgba(105, 26, 92, 0.2);
+        }
+
+    /* Campo "Nombre del producto": un poco más chico que la columna
+       (aquí puedes cambiar el porcentaje o el max-width a tu gusto) */
+    .producto-form-wrapper .producto-input-nombre {
+        width: 75%; /* ≈ quitarle un cuarto del ancho */
+        max-width: 420px; /* límite máximo en pixeles */
         margin: 0 auto;
     }
 
-    /* Inputs numéricos un poco más pequeños */
-    .producto-form-col .producto-input-numero {
-        width: auto;
-        max-width: 120px; /* aquí fuerzas que sean más pequeñitos */
+    /* Campos numéricos: Precio de venta y Stock disponible.
+       Los hago pequeñitos, aprox. un cuarto de la columna. */
+    .producto-form-wrapper .producto-input-numero {
+        width: 25%; /* aquí controlas qué tan chico lo quieres */
+        min-width: 120px; /* tamaño mínimo para que se lea bien */
+        max-width: 220px; /* por si la pantalla es muy grande */
+        margin: 0 auto;
+        text-align: right;
     }
 
-    /* Mensajes de validación del lado del cliente */
-    .text-danger {
-        font-size: 0.9rem;
-    }
+    /* ================== SECCIÓN DE IMAGEN ================== */
 
-    /* Sección de imagen centrada */
     .producto-imagen-section {
         margin-top: 10px;
-        margin-bottom: 20px;
+        margin-bottom: 22px;
         text-align: center;
     }
 
-    .producto-imagen-section .producto-label {
-        margin-bottom: 10px;
-    }
+        .producto-imagen-section .producto-label {
+            margin-bottom: 10px;
+        }
 
-    /* Cuadro de vista previa de la imagen */
     .producto-imagen-preview {
         width: 240px;
         height: 200px;
         border: 2px dashed #ced4da;
-        border-radius: 8px;
+        border-radius: 12px;
         margin: 0 auto 12px auto;
         display: flex;
         align-items: center;
@@ -105,24 +162,25 @@
         overflow: hidden;
     }
 
-    .producto-imagen-preview img {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
-    }
+        .producto-imagen-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
 
     .producto-imagen-placeholder {
         color: #999999;
         font-size: 0.9rem;
     }
 
-    /* Input file centrado y con ancho razonable */
-    .producto-input-file {
-        max-width: 260px;
+    /* Input de archivo "Seleccionar archivo":
+       mismo ancho que el campo de Nombre del producto. */
+    .producto-form-wrapper .producto-input-file {
+        width: 75%;
+        max-width: 420px;
         margin: 0 auto;
     }
 
-    /* Texto de ayuda de la imagen centrado */
     .producto-imagen-help {
         margin-top: 8px;
         font-size: 0.9rem;
@@ -130,44 +188,86 @@
         text-align: center;
     }
 
-    /* Sección del checkbox "Activo" centrada */
-    .producto-activo-section {
-        margin-top: 10px;
-        text-align: center;
-    }
+    /* ================== BOTONES ================== */
 
-    .producto-activo-checkbox {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        margin-top: 4px;
-    }
-
-    /* Contenedor de botones centrado */
     .producto-form-buttons {
         text-align: center;
-        margin-top: 25px;
+        margin-top: 28px;
     }
 
-    .producto-form-buttons .btn {
-        min-width: 150px;
+    .btn-guardar,
+    .btn-volver {
+        display: inline-block;
+        min-width: 160px;
+        padding: 9px 20px;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        border: none;
+        cursor: pointer;
+        text-decoration: none !important;
         margin: 0 8px;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .btn-guardar {
+        background: linear-gradient(135deg, #691A5C 0%, #9C4F84 100%);
+        color: #ffffff;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
+    }
+
+        .btn-guardar:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 22px rgba(105, 26, 92, 0.38);
+            color: #ffffff;
+        }
+
+    .btn-volver {
+        background-color: #e9ecef;
+        color: #495057;
+        border: 1px solid #ced4da;
+    }
+
+        .btn-volver:hover {
+            background-color: #dde1e4;
+            color: #343a40;
+        }
+
+    .producto-form-title {
+        font-size: 1.6rem;
+    }
+
+    .producto-form-row {
+        gap: 16px;
+    }
+
+    /* en móvil dejamos que los campos ocupen casi todo el ancho */
+    .producto-input-nombre,
+    .producto-input-file {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .producto-input-numero {
+        width: 100%;
+        max-width: 200px;
     }
 </style>
 
-<h2 class="producto-form-title">Editar Producto</h2>
-
-<p class="producto-form-intro">
-    Actualiza la información del producto registrado en el inventario
-    de la feria universitaria.
-</p>
-
 @using (Html.BeginForm("Edit", "Productos", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    @Html.AntiForgeryToken()
-    @Html.HiddenFor(m => m.ProductoId)
-    @Html.HiddenFor(m => m.ImagenPortada)
+    <div class="producto-form-wrapper">
+        <div class="producto-form-header">
+            <h2 class="producto-form-title">Editar Producto</h2>
+            <p class="producto-form-intro">
+                Actualiza la información del producto registrado en el inventario
+                de la feria universitaria.
+            </p>
+        </div>
+
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.ProductoId)
+        @Html.HiddenFor(m => m.ImagenPortada)
 
     <div class="producto-form-wrapper">
         @* Resumen de errores de validación del modelo *@
@@ -178,7 +278,7 @@
             <!-- Columna: Nombre del producto -->
             <div class="producto-form-col">
                 @Html.LabelFor(m => m.Nombre, htmlAttributes: new { @class = "producto-label" })
-                @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
+                @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control  producto-input-nombre" })
                 @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
             </div>
 
@@ -274,17 +374,22 @@
             </div>
         </div>
 
-        @* Botones de acción: centrados *@
+        @* Botones de acción *@
         <div class="producto-form-buttons">
-            <input type="submit" value="Guardar cambios" class="btn btn-primary" />
+            <button type="submit" class="btn-guardar">
+                Guardar producto
+            </button>
+
             @Html.ActionLink(
                 "Volver al listado",
                 "Index",
                 null,
-                new { @class = "btn btn-default" }
+                new { @class = "btn-volver" }
             )
         </div>
     </div>
+    </div>
+
 }
 
 @section Scripts {

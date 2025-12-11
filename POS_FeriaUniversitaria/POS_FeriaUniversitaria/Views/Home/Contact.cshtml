@@ -1,39 +1,163 @@
-﻿@{
-    // Título de la página
-    ViewBag.Title = ViewBag.Title ?? "Contacto";
+﻿﻿@{
+    // Título que verá el navegador y la barra superior
+    ViewBag.Title = "Contacto";
 }
 
-<main aria-labelledby="title" class="mt-4">
-    @* Encabezado principal de la página *@
-    <h2 id="title">@ViewBag.Title</h2>
-    <h4>@ViewBag.Message</h4>
+<style>
+    /* ==========================================================
+       FONDO GENERAL (mismo degradado morado)
+       ========================================================== */
+    .container.body-content {
+        max-width: 100% !important;
+        width: 100%;
+        margin: 0;
+        padding: 40px 20px;
+        box-sizing: border-box;
+        background: linear-gradient(135deg, #3A0B33 0%, #691A5C 100%);
+    }
 
-    <hr />
+    /* ==========================================================
+       TARJETA PRINCIPAL
+       ========================================================== */
+    .contact-wrapper {
+        background: #ffffff;
+        border-radius: 24px;
+        padding: 40px 35px 26px;
+        max-width: 900px;
+        width: 100%;
+        margin: 0 auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    }
 
-    @* Texto introductorio de la sección de contacto *@
-    <section class="mt-3">
-        <p>
-            Si tienes dudas, comentarios o sugerencias sobre el proyecto
-            <strong>Mini POS - Feria Universitaria</strong>, puedes comunicarte
-            directamente conmigo a través de los siguientes medios:
-        </p>
-    </section>
+    /* ==========================================================
+       ENCABEZADO
+       ========================================================== */
+    .contact-header {
+        text-align: center;
+        margin-bottom: 10px;
+    }
 
-    @* Datos de contacto de Julio Solís *@
-<section class="mt-3">
-    <h3>Información de contacto</h3>
-    <address>
-        <strong>Nombre:</strong> Julio Solís<br />
-        <strong>Teléfono:</strong> <a href="https://wa.me/50763591476">
-    +507 6359-1476</a><br />
-    <strong>Correo electrónico:</strong>
-    <a href="mailto:julio.solis1@utp.ac.pa">julio.solis1@utp.ac.pa</a>
-</address>
+    .contact-header h1 {
+        color: #691A5C;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+    }
 
-    <p class="mt-2">
-        Este proyecto se desarrolla con fines académicos para la materia
-        <strong>Desarrollo de Software IV</strong> y sirve como base para
-        futuros mejoramientos y ampliaciones de funcionalidad.
-    </p>
-</section>
+    .contact-header .subtitle {
+        color: #7A7A7A;
+        font-size: 0.98rem;
+    }
+
+    .contact-divider {
+        height: 3px;
+        border-radius: 999px;
+        margin: 20px 0 8px;
+        background: linear-gradient(90deg, #E8C7F0 0%, #F5E6FF 50%, #E8C7F0 100%);
+    }
+
+    /* ==========================================================
+       CONTENIDO
+       ========================================================== */
+    .contact-text {
+        color: #444444;
+        font-size: 0.98rem;
+        line-height: 1.7;
+        text-align: justify;
+        margin-bottom: 6px;
+    }
+
+    .contact-info-box {
+        margin-top: 10px;
+        padding: 14px 18px;
+        border-radius: 16px;
+        background: #FAF5FF;
+        border: 1px solid #E5D8FF;
+        font-size: 0.95rem;
+        color: #444444;
+    }
+
+    .contact-info-box strong {
+        color: #691A5C;
+    }
+
+    .contact-info-box a {
+        color: #0069D9;
+        text-decoration: none;
+    }
+
+    .contact-info-box a:hover {
+        text-decoration: underline;
+    }
+
+    /* ==========================================================
+       FOOTER DENTRO DEL CUADRO BLANCO
+       ========================================================== */
+    .contact-footer {
+        border-top: 1px solid #F0F0F0;
+        margin-top: 24px;
+        padding-top: 14px;
+        text-align: center;
+        font-size: 0.9rem;
+        color: #777777;
+    }
+
+    /* Ocultar el footer global del _Layout SOLO en esta vista
+       para evitar tener dos footers (uno morado y uno en la tarjeta) */
+    .container.body-content > hr,
+    .container.body-content > footer {
+        display: none !important;
+    }
+</style>
+
+<main aria-labelledby="title">
+    <div class="contact-wrapper">
+        <header class="contact-header">
+            <h1 id="title">Contacto</h1>
+            <p class="subtitle">
+                Si tienes dudas, comentarios o sugerencias sobre el Mini POS, puedes comunicarte conmigo.
+            </p>
+        </header>
+
+        <div class="contact-divider"></div>
+
+        <section>
+            <p class="contact-text">
+                Este proyecto se desarrolla con fines académicos y está pensado como una
+                simulación de punto de venta para ferias universitarias. Cualquier retroalimentación
+                sobre su diseño, funcionamiento o posibles mejoras es bienvenida.
+            </p>
+
+            <div class="contact-info-box">
+                <p>
+                    <strong>Nombre:</strong> Julio Solís<br />
+                    <strong>Teléfono:</strong>
+                    <a href="https://wa.me/50763591476" target="_blank" rel="noopener">
+                        +507 6359-1476
+                    </a><br />
+                    <strong>Correo electrónico:</strong>
+                    <a href="mailto:julio.solis1@utp.ac.pa">
+                        julio.solis1@utp.ac.pa
+                    </a>
+                </p>
+                <p>
+                    Este proyecto forma parte de la materia
+                    <strong>Desarrollo de Software IV</strong> de la
+                    <strong>Universidad Tecnológica de Panamá</strong>.
+                </p>
+            </div>
+
+            <p class="contact-text">
+                A futuro, este Mini POS puede ampliarse con nuevas funcionalidades como
+                manejo de múltiples cajas, reportes adicionales, integración con métodos
+                de pago y mejoras en la experiencia de usuario basadas en la retroalimentación
+                obtenida durante el curso.
+            </p>
+        </section>
+
+        <footer class="contact-footer">
+            © @DateTime.Now.Year - Julio Solís, 1GS222 (Todos los derechos reservados)
+        </footer>
+    </div>
 </main>

@@ -1,116 +1,354 @@
 ﻿@model IEnumerable<POS_FeriaUniversitaria.AccesoDatos.Entidades.Producto>
 
 @{
-    ViewBag.Title = "Productos";
+    // Título que verá el navegador y la barra superior
+    ViewBag.Title = "Inventario de Productos";
 }
 
+@*
+    Vista: Inventario de Productos (Productos/Index)
+    - Lista los productos activos en el inventario.
+    - Desde aquí se puede ir a:
+        * Crear un nuevo producto.
+        * Ver el historial de productos (incluyendo los eliminados lógicamente).
+    - El estilo visual está pensado para seguir la línea morada
+      de la página principal (Home/Index), pero sin saturar colores.
+*@
+
 <style>
-    /* Botón "Historial de productos": fondo celeste y texto blanco */
+    /* =========================================================================
+       ESTILOS GENERALES SOLO PARA ESTA VISTA (Productos/Index)
+       ========================================================================= */
+
+    /* Fondo morado degradado para todo el contenido de la vista */
+    .container.body-content {
+        max-width: 100% !important;
+        width: 100%;
+        margin: 0;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #3A0B33 0%, #691A5C 100%);
+        box-sizing: border-box;
+    }
+
+    /* Contenedor principal tipo "tarjeta" para el inventario */
+    .inventario-wrapper {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 24px 24px 0 0; /* arriba redondeado, abajo recto para pegar con el footer */
+        box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
+        padding: 28px 28px 24px 28px;
+    }
+
+    /* Cabecera del módulo */
+    .inventario-header {
+        text-align: left;
+        margin-bottom: 12px;
+        border-bottom: 3px solid rgba(105, 26, 92, 0.1);
+        padding-bottom: 12px;
+    }
+
+    .inventario-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #691A5C;
+        margin: 0;
+    }
+
+    .inventario-subtitle {
+        margin: 4px 0 0 0;
+        color: #6c757d;
+        font-size: 0.95rem;
+    }
+
+    /* Barra de acciones (Nuevo producto / Historial) */
+    .inventario-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: 18px;
+        margin-bottom: 4px;
+    }
+
+    /* Botones principales del módulo */
+    .btn-inventario {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 9px 22px;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        border: none;
+        text-decoration: none !important;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    /* "Nuevo producto": morado degradado, protagonista */
+    .btn-nuevo {
+        background: linear-gradient(135deg, #691A5C 0%, #9C4F84 100%);
+        color: #ffffff;
+    }
+
+    .btn-nuevo:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 20px rgba(105, 26, 92, 0.35);
+        color: #ffffff;
+    }
+
+    /* "Historial de productos": tono turquesa para diferenciarse */
     .btn-historial {
-        background-color: #00BCD4; /* puedes ajustar el tono si quieres */
-        border-color: #00A0B8;
+        background-color: #00BCD4;
         color: #ffffff;
     }
 
-        .btn-historial:hover {
-            background-color: #0097A7;
-            border-color: #008395;
-            color: #ffffff;
-            text-decoration: none;
-        }
-
-    /* Botón "Editar": amarillo con texto blanco */
-    .btn-editar {
-        background-color: #FFC107;
-        border-color: #E0A800;
+    .btn-historial:hover {
+        background-color: #0097A7;
+        transform: translateY(-1px);
+        box-shadow: 0 10px 20px rgba(0, 151, 167, 0.35);
         color: #ffffff;
-        padding: 4px 10px;
-        border-radius: 4px;
-        display: inline-block;
     }
 
-        .btn-editar:hover {
-            background-color: #E0A800;
-            border-color: #D39E00;
-            color: #ffffff;
-            text-decoration: none;
-        }
-
-    /* Botón "Eliminar": rojo con texto blanco */
-    .btn-eliminar {
-        background-color: #DC3545;
-        border-color: #C82333;
-        color: #ffffff;
-        padding: 4px 10px;
-        border-radius: 4px;
-        display: inline-block;
+    /* Contenedor de la tabla */
+    .inventario-table-container {
+        margin-top: 20px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, #F9F3FF 0%, #FFFFFF 60%, #FDFBFF 100%);
+        padding: 8px;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+        overflow-x: auto;
     }
 
-        .btn-eliminar:hover {
-            background-color: #C82333;
-            border-color: #BD2130;
-            color: #ffffff;
-            text-decoration: none;
-        }
+    /* Tabla custom */
+    .inventario-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: transparent;
+        font-size: 0.96rem;
+    }
 
-    /* Contenedor para alinear y separar "Editar" / "Eliminar" */
+    .inventario-table thead th {
+        background: #F3E5F5;
+        color: #3A0B33;
+        font-weight: 600;
+        padding: 12px 16px;
+        text-align: left;
+        border-bottom: 2px solid #E1CFEF;
+        white-space: nowrap;
+    }
+
+    .inventario-table tbody tr {
+        background: #ffffff;
+        transition: background-color 0.15s ease, box-shadow 0.15s ease,
+                    transform 0.15s ease;
+    }
+
+    .inventario-table tbody tr:nth-child(even) {
+        background: #FBF7FF;
+    }
+
+    .inventario-table tbody tr:hover {
+        background: #F1E4FF;
+        box-shadow: 0 8px 16px rgba(105, 26, 92, 0.15);
+        transform: translateY(-1px);
+    }
+
+    .inventario-table td {
+        padding: 10px 16px;
+        border-bottom: 1px solid #EDE7F6;
+        vertical-align: middle;
+    }
+
+    .inventario-col-nombre {
+        width: 45%;
+    }
+
+    .inventario-col-precio {
+        width: 20%;
+        white-space: nowrap;
+    }
+
+    .inventario-col-stock {
+        width: 15%;
+        white-space: nowrap;
+    }
+
+    .inventario-col-acciones {
+        width: 20%;
+        text-align: right;
+    }
+
+    /* Contenedor de botones Editar / Eliminar */
     .producto-acciones {
         display: flex;
-        justify-content: center;
-        gap: 8px; /* espacio entre los dos botones */
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
     }
+
+    /* Botón "Editar" */
+    .btn-editar {
+        display: inline-block;
+        padding: 5px 14px;
+        border-radius: 999px;
+        background-color: #FFC107;
+        border: 1px solid #E0A800;
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 0.88rem;
+        text-decoration: none !important;
+        transition: all 0.15s ease-in-out;
+    }
+
+    .btn-editar:hover {
+        background-color: #E0A800;
+        border-color: #D39E00;
+        color: #ffffff;
+    }
+
+    /* Botón "Eliminar" */
+    .btn-eliminar {
+        display: inline-block;
+        padding: 5px 14px;
+        border-radius: 999px;
+        background-color: #DC3545;
+        border: 1px solid #C82333;
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 0.88rem;
+        text-decoration: none !important;
+        transition: all 0.15s ease-in-out;
+    }
+
+    .btn-eliminar:hover {
+        background-color: #C82333;
+        border-color: #BD2130;
+        color: #ffffff;
+    }
+
+    /* --------- Footer dentro de este módulo --------- */
+
+    /* Ocultamos la línea <hr /> que pone el _Layout debajo del cuerpo */
+    .container.body-content > hr {
+        display: none;
+    }
+
+    /* Hacemos que el footer continúe el recuadro blanco del inventario */
+    .container.body-content > footer {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 0 0 24px 24px; /* parte inferior redondeada */
+        padding: 8px 0 12px 0;
+        box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
+        text-align: center;
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+        .inventario-title {
+            font-size: 1.6rem;
+        }
+
+        .inventario-actions {
+            justify-content: center;
+            text-align: center;
+        }
+
+        .inventario-col-acciones {
+            text-align: left;
+        }
+
+        .producto-acciones {
+            justify-content: flex-start;
+        }
+    
 </style>
 
+<div class="inventario-wrapper">
+    <div class="inventario-header">
+        <h1 class="inventario-title">Inventario de Productos</h1>
+        <p class="inventario-subtitle">
+            Gestiona los productos disponibles durante la feria universitaria:
+            agrega nuevos artículos, revisa sus precios y controla el stock.
+        </p>
+    </div>
 
-<h2>Inventario de Productos</h2>
+    <div class="inventario-actions">
+        @* Botón para registrar un nuevo producto en el inventario *@
+        @Html.ActionLink(
+            "Nuevo Producto",
+            "Create",
+            null,
+            new { @class = "btn-inventario btn-nuevo" }
+        )
 
-<p>
-    @Html.ActionLink(
-    "Nuevo Producto",
-    "Create",
-    null,
-    new { @class = "btn btn-primary" }
-)
+        @* Botón para ir al historial (productos eliminados / restaurados) *@
+        @Html.ActionLink(
+            "Historial de productos",
+            "Historial",
+            null,
+            new { @class = "btn-inventario btn-historial" }
+        )
+    </div>
 
-    @Html.ActionLink(
-        "Historial de productos",
-        "Historial",
-        null,
-        new { @class = "btn btn-historial" }
-    )
-</p>
+    <div class="inventario-table-container">
+        <table class="inventario-table">
+            <thead>
+                <tr>
+                    <th class="inventario-col-nombre">
+                        @Html.DisplayNameFor(m => m.Nombre)
+                    </th>
+                    <th class="inventario-col-precio">
+                        @Html.DisplayNameFor(m => m.PrecioVenta)
+                    </th>
+                    <th class="inventario-col-stock">
+                        @Html.DisplayNameFor(m => m.Stock)
+                    </th>
+                    <th class="inventario-col-acciones">
+                        @* Columna para botones de acción *@
+                    </th>
+                </tr>
+            </thead>
 
-<table class="table table-striped">
-    <tr>
-        <th>@Html.DisplayNameFor(m => m.Nombre)</th>
-        <th>@Html.DisplayNameFor(m => m.PrecioVenta)</th>
-        <th>@Html.DisplayNameFor(m => m.Stock)</th>
-        <th></th>
-    </tr>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Nombre</td>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.Nombre</td>
-            <td>@item.PrecioVenta.ToString("C")</td>
-            <td>@item.Stock</td>
-            <td>
-                <div class="producto-acciones">
-                    @Html.ActionLink(
-                        "Editar",
-                        "Edit",
-                        new { id = item.ProductoId },
-                        new { @class = "btn-editar" }
-                    )
+                        @* Formato de moneda *@
+                        <td>@item.PrecioVenta.ToString("C")</td>
 
-                    @Html.ActionLink(
-                        "Eliminar",
-                        "Delete",
-                        new { id = item.ProductoId },
-                        new { @class = "btn-eliminar" }
-                    )
-                </div>
-            </td>
-        </tr>
-    }
-</table>
+                        <td>@item.Stock</td>
+
+                        <td class="inventario-col-acciones">
+                            <div class="producto-acciones">
+                                @Html.ActionLink(
+                                    "Editar",
+                                    "Edit",
+                                    new { id = item.ProductoId },
+                                    new { @class = "btn-editar" }
+                                )
+
+                                @Html.ActionLink(
+                                    "Eliminar",
+                                    "Delete",
+                                    new { id = item.ProductoId },
+                                    new { @class = "btn-eliminar" }
+                                )
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

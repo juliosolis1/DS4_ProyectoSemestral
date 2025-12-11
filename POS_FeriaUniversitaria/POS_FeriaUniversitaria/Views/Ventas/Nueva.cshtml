@@ -1,20 +1,129 @@
-﻿@using POS_FeriaUniversitaria.Web.Models
+﻿﻿@using POS_FeriaUniversitaria.Web.Models
 @model CarritoViewModel
+
 @{
+    // Título que verá el navegador y la barra superior
     ViewBag.Title = "Nueva Venta / Carrito";
+
+    // Lista de productos que viene desde el controlador (para el combo)
     var productos = ViewBag.Productos as IEnumerable<POS_FeriaUniversitaria.AccesoDatos.Entidades.Producto>;
 }
 
+@*
+    Vista: Nueva Venta / Carrito (Ventas/Nueva)
+    - Permite seleccionar productos del inventario y agregarlos al carrito.
+    - Muestra un resumen de los ítems agregados, su subtotal y el total.
+    - Desde aquí se registra la venta simulada (sin pagos reales).
+    - Mantiene la estética general:
+        * Fondo morado degradado.
+        * Tarjeta blanca centrada.
+        * Footer integrado al recuadro.
+        * Botones con sus colores base y texto en blanco.
+*@
+
 <style>
+    /* ============================================================
+       FONDO GENERAL Y CONTENEDOR PRINCIPAL
+       ============================================================ */
+
+    .container.body-content {
+        max-width: 100% !important;
+        width: 100%;
+        margin: 0;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #3A0B33 0%, #691A5C 100%);
+        box-sizing: border-box;
+    }
+
+    /* Ocultamos la línea <hr /> del _Layout debajo del cuerpo */
+    .container.body-content > hr {
+        display: none;
+    }
+
+    /* Footer integrado como continuación del recuadro blanco */
+    .container.body-content > footer {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 0 0 24px 24px;
+        padding: 8px 0 12px 0;
+        box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
+        text-align: center;
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    /* Tarjeta blanca principal de la vista */
+    .venta-wrapper {
+        max-width: 1100px;
+        margin: 0 auto;              /* centrado */
+        background: #ffffff;
+        border-radius: 24px 24px 0 0;
+        box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
+        padding: 26px 30px 26px 30px;
+    }
+
+    /* Encabezado de la tarjeta */
+    .venta-header {
+        text-align: left;
+        margin-bottom: 18px;
+        border-bottom: 3px solid rgba(105, 26, 92, 0.10);
+        padding-bottom: 10px;
+    }
+
+    .venta-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #691A5C;
+        margin: 0;
+    }
+
+    .venta-subtitle {
+        margin: 6px 0 0 0;
+        color: #6c757d;
+        font-size: 0.96rem;
+    }
+
+    /* ============================================================
+       MENSAJES DE ALERTA
+       ============================================================ */
+
+    .venta-alert {
+        margin-bottom: 15px;
+    }
+
+    /* ============================================================
+       SECCIÓN 1: AGREGAR PRODUCTOS AL CARRITO
+       ============================================================ */
+
+    .venta-panel {
+        border-radius: 16px;
+        border: 1px solid #E1CFEF;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .venta-panel > .panel-heading {
+        background: linear-gradient(90deg, #691A5C, #9C4F84);
+        color: #ffffff;
+        font-weight: 600;
+        border-radius: 16px 16px 0 0;
+        padding: 10px 16px;
+        font-size: 1rem;
+    }
+
+    .venta-panel > .panel-body {
+        padding: 16px 20px 18px 20px;
+    }
+
     /* FILA: selector de producto + cantidad + botón Agregar */
     .venta-seleccion-row {
-        display: flex; /* todo en una sola fila */
-        justify-content: center; /* centrado horizontal */
-        align-items: center; /* alineado vertical */
-        gap: 12px; /* espacio entre los tres controles */
-        margin-top: 10px;
-        margin-bottom: 20px; /* espacio con la tabla del carrito */
-        flex-wrap: wrap; /* por si la pantalla es pequeña */
+        display: flex;               /* todo en una sola fila */
+        justify-content: center;     /* centrado horizontal */
+        align-items: center;         /* alineado vertical */
+        gap: 12px;                   /* espacio entre los tres controles */
+        margin-top: 6px;
+        margin-bottom: 4px;
+        flex-wrap: wrap;             /* por si la pantalla es pequeña */
     }
 
         /* Ancho mínimo del combo de productos */
@@ -27,148 +136,312 @@
             width: 100px;
         }
 
-    /* BLOQUE: observaciones y botón Registrar Venta */
+    /* ============================================================
+       SECCIÓN 2: TABLA DEL CARRITO
+       ============================================================ */
+
+    .venta-carrito-vacio {
+        margin-top: 18px;
+        font-style: italic;
+        color: #6c757d;
+    }
+
+    .venta-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 18px;
+        background: transparent;
+        font-size: 0.95rem;
+    }
+
+        .venta-table thead th {
+            background: #F3E5F5;
+            color: #3A0B33;
+            font-weight: 600;
+            padding: 10px 12px;
+            border-bottom: 2px solid #E1CFEF;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .venta-table tbody tr {
+            background: #ffffff;
+            transition: background-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .venta-table tbody tr:nth-child(even) {
+            background: #FBF7FF;
+        }
+
+        .venta-table tbody tr:hover {
+            background-color: #F5EBFF;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.10);
+        }
+
+        .venta-table td {
+            padding: 9px 12px;
+            vertical-align: middle;
+            border-top: 1px solid #F0E0FF;
+        }
+
+        .venta-table tfoot th {
+            padding: 10px 12px;
+            border-top: 2px solid #E1CFEF;
+        }
+
+    .venta-imagen {
+        max-width: 80px;
+        max-height: 80px;
+        border-radius: 10px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+        object-fit: cover;
+    }
+
+    .venta-cantidad-form {
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+    }
+
+    .venta-cantidad-input {
+        width: 90px;
+    }
+
+    /* ============================================================
+       BOTONES PERSONALIZADOS (texto blanco)
+       ============================================================ */
+
+    .btn-venta-agregar,
+    .btn-venta-actualizar,
+    .btn-venta-quitar,
+    .btn-registrar-venta {
+        color: #ffffff !important;
+        font-weight: 600;
+        border-radius: 999px;
+        padding: 7px 20px;
+        border-width: 1px;
+        text-decoration: none !important;
+    }
+
+    .btn-venta-agregar {
+        background-color: #28A745;
+        border-color: #218838;
+    }
+
+        .btn-venta-agregar:hover {
+            background-color: #218838;
+            border-color: #1E7E34;
+        }
+
+    .btn-venta-actualizar {
+        background-color: #FFC107;
+        border-color: #E0A800;
+    }
+
+        .btn-venta-actualizar:hover {
+            background-color: #E0A800;
+            border-color: #C69500;
+        }
+
+    .btn-venta-quitar {
+        background-color: #DC3545;
+        border-color: #C82333;
+    }
+
+        .btn-venta-quitar:hover {
+            background-color: #C82333;
+            border-color: #BD2130;
+        }
+
+    .btn-registrar-venta {
+        background-color: #691A5C;
+        border-color: #4C1041;
+        min-width: 200px;
+        margin-top: 12px;
+    }
+
+        .btn-registrar-venta:hover {
+            background-color: #4C1041;
+            border-color: #380B31;
+        }
+
+    /* ============================================================
+       SECCIÓN 3: OBSERVACIONES Y REGISTRO DE LA VENTA
+       ============================================================ */
+
     .venta-observaciones {
         margin-top: 10px;
     }
 
         .venta-observaciones textarea {
-            width: 100%; /* que use todo el ancho disponible */
+            width: 100%;          /* que use todo el ancho disponible */
             max-width: 100%;
             min-height: 90px;
         }
 
         .venta-observaciones .btn-registrar-venta {
             display: block;
-            margin: 15px auto 0 auto; /* centrado */
-            min-width: 180px;
+            margin-left: auto;
+            margin-right: auto;   /* centrado */
+        }
+
+        .venta-title {
+            font-size: 1.6rem;
+        }
+
+        .venta-table thead th,
+        .venta-table tbody td {
+            font-size: 0.9rem;
+        }
+
+        body {
+        background: linear-gradient(45deg, #3A0B33 0%, #691A5C 100%) !important;
         }
 </style>
 
-<h2>Nueva Venta / Carrito</h2>
-
-@if (TempData["Ok"] != null)
-{
-    <div class="alert alert-success">@TempData["Ok"]</div>
-}
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">@TempData["Error"]</div>
-}
-
-<div class="panel panel-default">
-    <div class="panel-heading">Agregar producto</div>
-    <div class="panel-body">
-        @using (Html.BeginForm("AgregarItem", "Ventas", FormMethod.Post))
-        {
-            @Html.AntiForgeryToken()
-            <div class="form-inline venta-seleccion-row">
-                <select name="productoId" class="form-control">
-                    <option value="">-- Selecciona un producto --</option>
-                    @foreach (var p in productos)
-                    {
-                        <option value="@p.ProductoId">
-                            @p.Nombre (@p.Stock) - @p.PrecioVenta.ToString("C")
-                        </option>
-                    }
-                </select>
-
-                <input type="number"
-                       name="cantidad"
-                       min="1"
-                       value="1"
-                       class="form-control" />
-
-                <button type="submit" class="btn btn-success">
-                    Agregar
-                </button>
-            </div>
-        }
+<div class="venta-wrapper">
+    <div class="venta-header">
+        <h1 class="venta-title">Nueva Venta / Carrito</h1>
+        <p class="venta-subtitle">
+            Selecciona productos del inventario, ajusta las cantidades y registra la venta
+            simulada para la feria universitaria.
+        </p>
     </div>
-</div>
 
-@if (Model.Items.Count == 0)
-{
-    <p><em>El carrito está vacío.</em></p>
-}
-else
-{
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th style="width:120px;">Imagen</th>
-                <th>Producto</th>
-                <th style="width:120px;">Precio</th>
-                <th style="width:160px;">Cantidad</th>
-                <th style="width:140px;">Subtotal</th>
-                <th style="width:120px;"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var i in Model.Items)
-            {
-                <tr>
-                    <td>
-                        @if (!string.IsNullOrEmpty(i.ImagenPortada))
-                        {
-                            <img src="@Url.Content(i.ImagenPortada)"
-                                 alt="Imagen de @i.Nombre"
-                                 style="max-width:80px; max-height:80px;" />
-                        }
-                        else
-                        {
-                            <span>Sin imagen</span>
-                        }
-                    </td>
-                    <td>@i.Nombre</td>
-                    <td>@i.PrecioUnitario.ToString("C")</td>
-                    <td>
-                        @using (Html.BeginForm("ActualizarCantidad", "Ventas", FormMethod.Post, new { @class = "form-inline" }))
-                        {
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="productoId" value="@i.ProductoId" />
-                            <input type="number" name="cantidad" min="1" value="@i.Cantidad" class="form-control" style="width:90px;" />
-                            <button type="submit" class="btn btn-default">Actualizar</button>
-                        }
-                    </td>
-                    <td>@i.Subtotal.ToString("C")</td>
-                    <td>
-                        @using (Html.BeginForm("QuitarItem", "Ventas", FormMethod.Post))
-                        {
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="productoId" value="@i.ProductoId" />
-                            <button type="submit" class="btn btn-danger">Quitar</button>
-                        }
-                    </td>
-                </tr>
-            }
+    @* Mensajes de confirmación o error *@
+    @if (TempData["Ok"] != null)
+    {
+        <div class="alert alert-success venta-alert">@TempData["Ok"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger venta-alert">@TempData["Error"]</div>
+    }
 
-        </tbody>
-        <tfoot>
-            <tr>
-                <th colspan="4" class="text-right">TOTAL</th>
-                <th>@Model.Total.ToString("C")</th>
-                <th></th>
-            </tr>
-        </tfoot>
-    </table>
-
-    <div class="panel panel-default">
+    @* ===================== SECCIÓN 1: AGREGAR PRODUCTO ===================== *@
+    <div class="panel panel-default venta-panel">
+        <div class="panel-heading">Agregar producto al carrito</div>
         <div class="panel-body">
-            @using (Html.BeginForm("ConfirmarVenta", "Ventas", FormMethod.Post))
+            @using (Html.BeginForm("AgregarItem", "Ventas", FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
-                <div class="venta-observaciones">
-                    <textarea name="observaciones"
-                              class="form-control"
-                              placeholder="Observaciones (opcional)"></textarea>
+                <div class="form-inline venta-seleccion-row">
+                    <select name="productoId" class="form-control">
+                        <option value="">-- Selecciona un producto --</option>
+                        @foreach (var p in productos)
+                        {
+                            <option value="@p.ProductoId">
+                                @p.Nombre (@p.Stock) - @p.PrecioVenta.ToString("C")
+                            </option>
+                        }
+                    </select>
 
-                    <button type="submit"
-                            class="btn btn-primary btn-registrar-venta">
-                        Registrar Venta
+                    <input type="number"
+                           name="cantidad"
+                           min="1"
+                           value="1"
+                           class="form-control" />
+
+                    <button type="submit" class="btn btn-success btn-venta-agregar">
+                        Agregar
                     </button>
                 </div>
             }
         </div>
     </div>
-}
+
+    @* ===================== SECCIÓN 2: TABLA DEL CARRITO ===================== *@
+    @if (Model.Items.Count == 0)
+    {
+        <p class="venta-carrito-vacio"><em>El carrito está vacío.</em></p>
+    }
+    else
+    {
+        <table class="table table-bordered venta-table">
+            <thead>
+                <tr>
+                    <th>Imagen</th>
+                    <th>Producto</th>
+                    <th>Precio unitario</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var i in Model.Items)
+                {
+                    <tr>
+                        <td>
+                            @if (!string.IsNullOrEmpty(i.ImagenPortada))
+                            {
+                                <img src="@Url.Content(i.ImagenPortada)"
+                                     alt="Imagen de @i.Nombre"
+                                     class="venta-imagen" />
+                            }
+                            else
+                            {
+                                <span>Sin imagen</span>
+                            }
+                        </td>
+                        <td>@i.Nombre</td>
+                        <td>@i.PrecioUnitario.ToString("C")</td>
+                        <td>
+                            @using (Html.BeginForm("ActualizarCantidad", "Ventas", FormMethod.Post, new { @class = "form-inline venta-cantidad-form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="productoId" value="@i.ProductoId" />
+                                <input type="number"
+                                       name="cantidad"
+                                       value="@i.Cantidad"
+                                       class="form-control venta-cantidad-input" />
+                                <button type="submit" class="btn btn-default btn-venta-actualizar">
+                                    Actualizar
+                                </button>
+                            }
+                        </td>
+                        <td>@i.Subtotal.ToString("C")</td>
+                        <td>
+                            @using (Html.BeginForm("QuitarItem", "Ventas", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="productoId" value="@i.ProductoId" />
+                                <button type="submit" class="btn btn-danger btn-venta-quitar">
+                                    Quitar
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="4" class="text-right">TOTAL</th>
+                    <th>@Model.Total.ToString("C")</th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+
+        @* ===================== SECCIÓN 3: OBSERVACIONES Y REGISTRO ===================== *@
+        <div class="panel panel-default venta-panel" style="margin-top: 18px;">
+            <div class="panel-body">
+                @using (Html.BeginForm("ConfirmarVenta", "Ventas", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="venta-observaciones">
+                        <textarea name="observaciones"
+                                  class="form-control"
+                                  placeholder="Observaciones (opcional)"></textarea>
+
+                        <button type="submit"
+                                class="btn btn-primary btn-registrar-venta">
+                            Registrar Venta
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>

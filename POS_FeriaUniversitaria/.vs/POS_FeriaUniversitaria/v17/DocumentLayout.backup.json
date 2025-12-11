@@ -3,8 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\jsass\\source\\repos\\POS_FeriaUniversitaria\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2DE27D21-57DF-401E-835E-9412361C3852}|POS_FeriaUniversitaria\\POS_FeriaUniversitaria.csproj|c:\\users\\jsass\\source\\repos\\pos_feriauniversitaria\\pos_feriauniversitaria\\views\\productos\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2DE27D21-57DF-401E-835E-9412361C3852}|POS_FeriaUniversitaria\\POS_FeriaUniversitaria.csproj|solutionrelative:pos_feriauniversitaria\\views\\productos\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{2DE27D21-57DF-401E-835E-9412361C3852}|POS_FeriaUniversitaria\\POS_FeriaUniversitaria.csproj|c:\\users\\jsass\\source\\repos\\pos_feriauniversitaria\\pos_feriauniversitaria\\views\\home\\contact.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2DE27D21-57DF-401E-835E-9412361C3852}|POS_FeriaUniversitaria\\POS_FeriaUniversitaria.csproj|solutionrelative:pos_feriauniversitaria\\views\\home\\contact.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DE27D21-57DF-401E-835E-9412361C3852}|POS_FeriaUniversitaria\\POS_FeriaUniversitaria.csproj|c:\\users\\jsass\\source\\repos\\pos_feriauniversitaria\\pos_feriauniversitaria\\views\\home\\about.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2DE27D21-57DF-401E-835E-9412361C3852}|POS_FeriaUniversitaria\\POS_FeriaUniversitaria.csproj|solutionrelative:pos_feriauniversitaria\\views\\home\\about.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,14 +23,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "C:\\Users\\jsass\\source\\repos\\POS_FeriaUniversitaria\\POS_FeriaUniversitaria\\Views\\Productos\\Edit.cshtml",
-              "RelativeDocumentMoniker": "POS_FeriaUniversitaria\\Views\\Productos\\Edit.cshtml",
-              "ToolTip": "C:\\Users\\jsass\\source\\repos\\POS_FeriaUniversitaria\\POS_FeriaUniversitaria\\Views\\Productos\\Edit.cshtml",
-              "RelativeToolTip": "POS_FeriaUniversitaria\\Views\\Productos\\Edit.cshtml",
-              "ViewState": "AgIAADIAAAAAAAAAAAAvwEcAAAAsAAAAAAAAAA==",
+              "Title": "Contact.cshtml",
+              "DocumentMoniker": "C:\\Users\\jsass\\source\\repos\\POS_FeriaUniversitaria\\POS_FeriaUniversitaria\\Views\\Home\\Contact.cshtml",
+              "RelativeDocumentMoniker": "POS_FeriaUniversitaria\\Views\\Home\\Contact.cshtml",
+              "ToolTip": "C:\\Users\\jsass\\source\\repos\\POS_FeriaUniversitaria\\POS_FeriaUniversitaria\\Views\\Home\\Contact.cshtml",
+              "RelativeToolTip": "POS_FeriaUniversitaria\\Views\\Home\\Contact.cshtml",
+              "ViewState": "AgIAAE4AAAAAAAAAAAAAAG4AAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-10T03:22:28.666Z",
+              "WhenOpened": "2025-12-11T01:47:11.831Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "About.cshtml",
+              "DocumentMoniker": "C:\\Users\\jsass\\source\\repos\\POS_FeriaUniversitaria\\POS_FeriaUniversitaria\\Views\\Home\\About.cshtml",
+              "RelativeDocumentMoniker": "POS_FeriaUniversitaria\\Views\\Home\\About.cshtml",
+              "ToolTip": "C:\\Users\\jsass\\source\\repos\\POS_FeriaUniversitaria\\POS_FeriaUniversitaria\\Views\\Home\\About.cshtml",
+              "RelativeToolTip": "POS_FeriaUniversitaria\\Views\\Home\\About.cshtml",
+              "ViewState": "AgIAAGAAAAAAAAAAAAAAAIEAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-11T01:46:26.457Z",
               "EditorCaption": ""
             }
           ]

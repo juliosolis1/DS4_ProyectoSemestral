@@ -1,54 +1,290 @@
 ﻿@{
     ViewBag.Title = "Mini POS - Feria Universitaria";
 }
+
+@*
+    Vista de inicio (menú principal) del Mini POS.
+    Desde aquí el usuario puede ir a:
+      - Inventario de productos.
+      - Nueva venta / Carrito.
+      - Reporte diario / Cierre de caja.
+    Solo se trabaja la parte visual y de navegación;
+    la lógica de negocio está en los controladores y servicios.
+*@
+
 <style>
+    /* =========================================================================
+       ESTILOS GENERALES SOLO PARA ESTA VISTA (Home/Index)
+       No se modifica Site.css. Todo el estilo vive aquí.
+       Paleta basada en la UTP (morado principal #691A5C).
+       ========================================================================= */
 
-        /* Título dentro del banner */
-        .titulo-banner h2 {
-            margin: 0;
-            color: #691A5C;
-            font-weight: 600;
-        }
-
-    /* Texto que va debajo del banner */
-    .texto-subtitulo {
+    /* Contenedor principal generado en _Layout.cshtml */
+    .container.body-content {
+        max-width: 100% !important;
+        width: 100%;
+        margin: 0;
+        padding-left: 0;
+        padding-right: 0;
         text-align: center;
-        margin-top: 25px;
-        margin-bottom: 25px;
     }
 
-    /* Botones de los módulos (un poco más grandes) */
-    .opciones-modulos .btn {
+    /* Fondo morado liso + centrado del contenido */
+    .body-content {
+        min-height: calc(100vh - 90px);      /* Altura mínima (restando navbar y footer) */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #3A0B33 0%, #691A5C 100%);
+        padding: 40px 20px;
+        box-sizing: border-box;
+    }
+
+    /* Ocultar el footer global del _Layout_ solo en esta vista */
+    .container.body-content > footer {
+        display: none;
+    }
+
+    /* =========================================================================
+       TARJETA PRINCIPAL (CONTENEDOR BLANCO)
+       ========================================================================= */
+    .pos-container {
+        background: #ffffff;
+        border-radius: 24px;
+        padding: 40px 35px;
+        max-width: 900px;
+        width: 100%;
+        margin: 0 auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+        animation: pos-fade-in 0.6s ease-out;
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+    }
+
+    /* =========================================================================
+       ENCABEZADO DE LA TARJETA (TÍTULO Y SUBTÍTULO)
+       ========================================================================= */
+    .pos-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .pos-header h1 {
+        color: #691A5C;             /* morado UTP */
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+    }
+
+    .pos-header .subtitle {
+        color: #7A7A7A;
         font-size: 1.1rem;
-        padding: 15px 10px;
-        width: 100%; /* tipo btn-block */
+        font-weight: 400;
+    }
+
+    /* Línea divisora de color entre el título y las opciones */
+    .pos-divider {
+        height: 4px;
+        background: linear-gradient(90deg, #691A5C, #9C4F84, #F4D9FF);
+        border-radius: 2px;
+        margin: 25px 0 30px 0;
+    }
+
+    /* Texto de instrucción */
+    .pos-instruction {
+        text-align: center;
+        color: #555555;
+        font-size: 1.1rem;
+        margin-bottom: 35px;
+        font-weight: 500;
+    }
+
+    /* =========================================================================
+       BOTONES DE MÓDULOS (INVENTARIO, VENTA, REPORTE)
+       ========================================================================= */
+    .pos-button-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 24px;
+        margin-bottom: 30px;
+    }
+
+    .pos-module-button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 16px;
+        padding: 28px 20px;
+        color: #ffffff;
+        font-size: 1.15rem;
+        font-weight: 600;
+        text-decoration: none;
+
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .pos-module-button span.icon {
+        font-size: 2.4rem;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .pos-module-button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .pos-module-button:hover::before {
+        opacity: 1;
+    }
+
+    .pos-module-button:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+        text-decoration: none;
+    }
+
+    .pos-module-button:active {
+        transform: translateY(-2px);
+    }
+
+    /* Variantes de color para cada módulo (todas en gama morada) */
+
+    /* INVENTARIO */
+    .pos-module-button.inventory {
+        background: linear-gradient(135deg, #691A5C 0%, #3A0B33 100%);
+        box-shadow: 0 8px 22px rgba(105, 26, 92, 0.55);
+    }
+
+    .pos-module-button.inventory:hover {
+        box-shadow: 0 14px 30px rgba(105, 26, 92, 0.75);
+        color: #FFF6FF;
+    }
+
+    /* VENTA */
+    .pos-module-button.sales {
+        background: linear-gradient(135deg, #9C4F84 0%, #691A5C 100%);
+        box-shadow: 0 8px 22px rgba(156, 79, 132, 0.55);
+        color: #FFF6FF;
+    }
+
+    .pos-module-button.sales:hover {
+        box-shadow: 0 14px 30px rgba(156, 79, 132, 0.75);
+        color: #FFF6FF;
+    }
+
+    /* REPORTE */
+    .pos-module-button.reports {
+        background: linear-gradient(135deg, #9C4F84 0%, #3A0B33 100%);
+        box-shadow: 0 8px 22px rgba(58, 11, 51, 0.55);
         color: #FFFFFF;
+    }
+
+    .pos-module-button.reports:hover {
+        box-shadow: 0 14px 30px rgba(58, 11, 51, 0.75);
+        color: #FFFFFF;
+    }
+
+    /* =========================================================================
+       PIE DE PÁGINA INTERNO DE LA TARJETA
+       ========================================================================= */
+    .pos-footer {
+        text-align: center;
+        color: #888888;
+        font-size: 0.9rem;
+        margin-top: 20px;
+        padding-top: 18px;
+        border-top: 1px solid #e0e0e0;
+    }
+
+        .pos-instruction {
+            font-size: 1rem;
+        }
+    
+
+    /* Ocultar la línea <hr /> que agrega _Layout justo debajo del cuerpo */
+    .body-content > hr {
+        display: none;
     }
 </style>
 
-<!-- Banner morado a todo lo ancho, pegado al menú -->
-<div class="titulo-banner">
-    <h2>Mini POS - Feria Universitaria</h2>
-</div>
+@*
+    ESTRUCTURA HTML DE LA VISTA
+    - Tarjeta principal con título, texto de ayuda y botones de navegación.
+*@
 
-<p class="texto-subtitulo">
-    Selecciona el módulo con el que deseas trabajar:
-</p>
+<div class="pos-container">
+    <div class="pos-header">
+        <h1>Mini POS</h1>
+        <p class="subtitle">Feria Universitaria</p>
+    </div>
 
-<div class="row opciones-modulos text-center">
-    <div class="col-md-4">
-        <a href="@Url.Action("Index", "Productos")" class="btn btn-primary">
+    <div class="pos-divider"></div>
+
+    <p class="pos-instruction">
+        Selecciona el módulo con el que deseas trabajar:
+    </p>
+
+    <div class="pos-button-grid">
+        @* BOTÓN 1: INVENTARIO *@
+        <a href="@Url.Action("Index", "Productos")"
+           class="pos-module-button inventory">
+            <span class="icon">📦</span>
             Inventario (Productos)
         </a>
-    </div>
-    <div class="col-md-4">
-        <a href="@Url.Action("Nueva", "Ventas")" class="btn btn-success">
+
+        @* BOTÓN 2: NUEVA VENTA / CARRITO *@
+        <a href="@Url.Action("Nueva", "Ventas")"
+           class="pos-module-button sales">
+            <span class="icon">🛒</span>
             Nueva Venta / Carrito
         </a>
-    </div>
-    <div class="col-md-4">
-        <a href="@Url.Action("Diario", "Reportes")" class="btn btn-info">
+
+        @* BOTÓN 3: REPORTE DIARIO / CIERRE DE CAJA *@
+        <a href="@Url.Action("Diario", "Reportes")"
+           class="pos-module-button reports">
+            <span class="icon">📊</span>
             Reporte Diario / Cierre de Caja
         </a>
     </div>
+
+    <div class="pos-footer">
+        © @DateTime.Now.Year - Julio Solís, 1GS222 (Todos los derechos reservados)
+    </div>
 </div>
+
+@section scripts {
+    <script>
+        // Animación de entrada para los botones del menú principal (solo visual)
+        (function () {
+            var buttons = document.querySelectorAll('.pos-module-button');
+            if (!buttons || buttons.length === 0) return;
+
+            buttons.forEach(function (button, index) {
+                button.style.opacity = '0';
+                button.style.transform = 'translateY(20px)';
+
+                setTimeout(function () {
+                    button.style.transition = 'all 0.5s ease';
+                    button.style.opacity = '1';
+                    button.style.transform = 'translateY(0)';
+                }, 200 + (index * 120));
+            });
+        })();
+    </script>
+}

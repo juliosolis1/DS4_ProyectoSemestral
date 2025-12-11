@@ -1,32 +1,184 @@
-﻿@{
-    ViewBag.Title = "Reporte Diario";
+﻿﻿@{
+    ViewBag.Title = "Reporte Diario / Cierre de Caja";
 }
 
-@{
-    ViewBag.Title = "Reporte Diario";
-}
+@*
+    Vista: Reporte Diario / Cierre de Caja (Reportes/Diario)
+    - Permite consultar, por fecha, el resumen de ventas y el detalle de cada venta.
+    - Consume la API REST /api/reportes/diario.
+    - Mantiene la misma estética que:
+        * Página principal (Home/Index)
+        * Inventario de productos (Productos/Index)
+        * Nueva venta / Carrito (Ventas/Nueva)
+*@
 
 <style>
-    /* Contenedor de la fecha del reporte diario */
-    .reporte-diario-fecha {
-        /* Coloca los elementos en una misma fila */
-        display: flex;
-        /* Centra horizontalmente el input y el botón */
-        justify-content: center;
-        /* Centra verticalmente por si cambian de tamaño */
-        align-items: center;
-        /* Espacio arriba y abajo del bloque */
-        margin: 20px 0;
-        /* Espacio entre el input y el botón (reemplaza el margin-left inline) */
-        gap: 10px;
+    /* ================== FONDO GENERAL DE LA VISTA ================== */
+
+    .container.body-content {
+        max-width: 100% !important;
+        width: 100%;
+        margin: 0;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #3A0B33 0%, #691A5C 100%);
+        box-sizing: border-box;
     }
 
-        /* Opcional: limita un poco el ancho del input de fecha */
-        .reporte-diario-fecha input[type="date"] {
-            max-width: 220px;
-        }
+    /* Ocultamos la línea <hr /> del _Layout debajo del cuerpo */
+    .container.body-content > hr {
+        display: none;
+    }
+
+    /* Footer integrado como continuación del recuadro blanco */
+    .container.body-content > footer {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 0 0 24px 24px;
+        padding: 8px 0 12px 0;
+        box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
+        text-align: center;
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    /* ================== TARJETA PRINCIPAL DEL REPORTE ================== */
+
+    .reporte-wrapper {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 24px 24px 0 0;
+        box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
+        padding: 28px 32px 32px 32px;
+    }
+
+    .reporte-header {
+        margin-bottom: 18px;
+    }
+
+    .reporte-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #691A5C;
+        margin: 0;
+    }
+
+    .reporte-subtitle {
+        margin: 4px 0 0 0;
+        color: #6c757d;
+        font-size: 0.95rem;
+    }
+
+    .reporte-divider {
+        margin: 18px 0 22px 0;
+        height: 3px;
+        width: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #E5C8FF 0%, #F9E9FF 40%, #E5C8FF 100%);
+    }
+
+    /* ================== BLOQUE PARA SELECCIONAR LA FECHA ============== */
+
+    .reporte-filtro {
+        background: linear-gradient(135deg, #F9F3FF 0%, #FFFFFF 60%, #FDFBFF 100%);
+        border-radius: 16px;
+        padding: 18px 20px 22px 20px;
+        border: 1px solid #E1CFEF;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+        margin-bottom: 20px;
+    }
+
+    .reporte-filtro-titulo {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #3A0B33;
+        margin-bottom: 10px;
+    }
+
+    .reporte-diario-fecha {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; /* <-- centra el input y el botón */
+        align-items: center;
+        gap: 10px;
+        margin: 10px auto 4px auto; /* <-- centra el bloque completo */
+    }
+
+    .reporte-diario-fecha input[type="date"] {
+        max-width: 230px;
+    }
+
+    .btn-consultar-reporte {
+        padding: 8px 22px;
+        border-radius: 999px;
+        border: 1px solid #691A5C;
+        background: linear-gradient(135deg, #8E24AA 0%, #5E35B1 100%);
+        color: #ffffff;
+        font-weight: 600;
+        box-shadow: 0 10px 18px rgba(105, 26, 92, 0.35);
+    }
+
+    .btn-consultar-reporte:hover,
+    .btn-consultar-reporte:focus {
+        background: linear-gradient(135deg, #6A1B9A 0%, #4527A0 100%);
+        border-color: #4A148C;
+        color: #ffffff;
+    }
+
+    .reporte-nota {
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
+    /* ================== ÁREA DEL RESULTADO DEL REPORTE =============== */
+
+    .reporte-resultado {
+        margin-top: 25px;
+    }
+
+    .reporte-resultado h3 {
+        color: #691A5C;
+        font-weight: 700;
+        margin-top: 0;
+    }
+
+    .reporte-resultado h4 {
+        color: #3A0B33;
+        font-weight: 600;
+        margin-top: 24px;
+    }
+
+    .reporte-venta-card {
+        margin-bottom: 15px;
+        padding: 12px 14px;
+        border-radius: 16px;
+        border: 1px solid #E1CFEF;
+        background: #FFFFFF;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+    }
 
     /* Tabla de detalle de productos en el reporte diario */
+    .tabla-detalle-productos {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 8px;
+        font-size: 0.92rem;
+    }
+
+    .tabla-detalle-productos thead th {
+        background: #F3E5F5;
+        color: #3A0B33;
+        padding: 8px 10px;
+        font-weight: 600;
+        border-bottom: 2px solid #E1CFEF;
+    }
+
+    .tabla-detalle-productos tbody tr:nth-child(even) {
+        background-color: #FAF5FF;
+    }
+
     .tabla-detalle-productos th:first-child,
     .tabla-detalle-productos td:first-child {
         width: 90px; /* ancho fijo para la columna de imagen */
@@ -41,22 +193,52 @@
         display: block;
         margin: 0 auto; /* centrada en su celda */
     }
+
+    .reporte-diario-fecha {
+        justify-content: center;
+    }
+
+
+        .tabla-detalle-productos th,
+        .tabla-detalle-productos td {
+            font-size: 0.86rem;
+        }
+
+    body {
+        background: linear-gradient(45deg, #3A0B33 0%, #691A5C 100%) !important;
+    }
 </style>
 
-<h2>Reporte Diario / Cierre de Caja</h2>
+<div class="reporte-wrapper">
+    <div class="reporte-header">
+        <h1 class="reporte-title">Reporte Diario / Cierre de Caja</h1>
+        <p class="reporte-subtitle">
+            Selecciona una fecha para ver el resumen de ventas y el detalle
+            de cada venta registrada durante la feria universitaria.
+        </p>
+        <div class="reporte-divider"></div>
+    </div>
 
-<p>Selecciona la fecha para consultar el resumen de ventas.</p>
+    <div class="reporte-filtro">
+        <h3 class="reporte-filtro-titulo">Consultar reporte por fecha</h3>
 
-<div class="form-inline reporte-diario-fecha">
-    <input type="date" id="fecha" class="form-control" />
-    <button id="btnBuscar" class="btn btn-primary">Consultar</button>
-</div>
+        <div class="form-inline reporte-diario-fecha">
+            <input type="date" id="fecha" class="form-control" />
+            <button id="btnBuscar" class="btn btn-consultar-reporte">
+                Consultar
+            </button>
+        </div>
 
-<hr />
+        <p class="reporte-nota text-muted">
+            El reporte mostrará un resumen del día (total de ventas y número de
+            transacciones) y el detalle de productos vendidos.
+        </p>
+    </div>
 
-<div id="resultado">
-    <!-- Aquí se mostrará el resumen + detalle traído por la API -->
-    <p class="text-muted">Aún no se ha consultado ninguna fecha.</p>
+    <div id="resultado" class="reporte-resultado">
+        <!-- Aquí se mostrará el resumen + detalle traído por la API -->
+        <p class="text-muted">Aún no se ha consultado ninguna fecha.</p>
+    </div>
 </div>
 
 @section Scripts {
@@ -99,7 +281,8 @@
                         // Recorremos cada venta
                         data.ventas.forEach(function (venta) {
 
-                            html += "<div style='margin-bottom:15px; padding:10px; border:1px solid #ddd; border-radius:4px;'>";
+                            // Tarjeta contenedora de cada venta
+                            html += "<div class='reporte-venta-card'>";
 
                             // Cabecera de la venta
                             html += "<h5>Venta #" + venta.VentaId +

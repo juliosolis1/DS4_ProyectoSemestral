@@ -4,28 +4,184 @@
     ViewBag.Title = "Eliminar Producto";
 }
 
-<h2>Eliminar Producto</h2>
+@*
+    Vista: Delete (Eliminar Producto)
+    Esta vista muestra un recuadro flotante centrado con los datos del producto
+    y pide confirmación antes de eliminarlo del inventario.
+*@
 
-<h3>¿Seguro que deseas eliminar este producto?</h3>
-<div>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>@Html.DisplayNameFor(m => m.Nombre)</dt>
-        <dd>@Html.DisplayFor(m => m.Nombre)</dd>
+<style>
+    /* ================== FONDO GENERAL DE LA VISTA ================== */
 
-        <dt>@Html.DisplayNameFor(m => m.PrecioVenta)</dt>
-        <dd>@Html.DisplayFor(m => m.PrecioVenta)</dd>
-
-        <dt>@Html.DisplayNameFor(m => m.Stock)</dt>
-        <dd>@Html.DisplayFor(m => m.Stock)</dd>
-    </dl>
-
-    @using (Html.BeginForm("Delete", "Productos", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-        @Html.HiddenFor(m => m.ProductoId)
-
-        <input type="submit" value="Eliminar" class="btn btn-danger" />
-        @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-default" })
+    /* Fondo general para que no se vea la franja blanca inferior */
+    body {
+        background: linear-gradient(45deg, #3A0B33 0%, #691A5C 100%);
     }
+
+    .container.body-content {
+        max-width: 100% !important;
+        width: 100%;
+        margin: 0;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #3A0B33 0%, #691A5C 100%);
+        box-sizing: border-box;
+    }
+
+    /* Ocultamos la línea <hr /> del _Layout debajo del cuerpo */
+    .container.body-content > hr {
+        display: none;
+    }
+
+    /* Footer integrado como parte inferior blanca, pegado al recuadro */
+    .container.body-content > footer {
+        max-width: 950px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 0 0 24px 24px;
+        padding: 8px 0 12px 0;
+        box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
+        text-align: center;
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    /* ================== TARJETA DE CONFIRMACIÓN ================== */
+
+    .producto-delete-wrapper {
+        max-width: 950px;
+        margin: 0 auto;   /* centrado horizontal */
+    }
+
+    .producto-delete-card {
+        background-color: #ffffff;
+        border-radius: 24px 24px 0 0;
+        padding: 26px 30px 24px 30px;
+        box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
+    }
+
+    .producto-delete-title {
+        text-align: center;
+        margin-bottom: 4px;
+        font-weight: 700;
+        color: #691A5C;
+    }
+
+    .producto-delete-subtitle {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #6c757d;
+    }
+
+    .producto-delete-warning {
+        background: #fff3cd;
+        border: 1px solid #ffeeba;
+        color: #856404;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 0.95rem;
+        margin-bottom: 18px;
+        text-align: center;
+    }
+
+    /* ================== LISTA DE DATOS DEL PRODUCTO ================== */
+
+    .producto-delete-datos {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-row-gap: 10px;
+        grid-column-gap: 20px;
+        margin-bottom: 24px;
+    }
+
+    .producto-delete-datos dt {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .producto-delete-datos dd {
+        margin-left: 0;
+        color: #343a40;
+        word-break: break-word;
+    }
+
+    /* ================== BOTONES ================== */
+
+    .producto-delete-buttons {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .btn-eliminar,
+    .btn-cancelar {
+        display: inline-block;
+        min-width: 150px;
+        padding: 9px 20px;
+        border-radius: 999px;
+        border: none;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.2s ease-in-out;
+        margin: 0 6px;
+    }
+
+    /* Botón rojo (Eliminar) */
+    .btn-eliminar {
+        background-color: #dc3545;
+        color: #ffffff;
+    }
+
+    .btn-eliminar:hover {
+        background-color: #c82333;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(220, 53, 69, 0.35);
+    }
+
+    /* Botón gris (Cancelar, similar a "Volver al listado") */
+    .btn-cancelar {
+        background-color: #e9ecef;
+        color: #495057;
+    }
+
+        .btn-cancelar:hover {
+            background-color: #707070; /* fondo negro más marcado */
+            color: #ffffff !important; /* texto blanco, sin tono azul */
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+            text-decoration: none;
+        }
+</style>
+
+<div class="producto-delete-wrapper">
+    <div class="producto-delete-card">
+        <h2 class="producto-delete-title">Eliminar producto</h2>
+        <p class="producto-delete-subtitle">
+            ¿Seguro que deseas eliminar este producto del inventario de la feria universitaria?
+        </p>
+
+        <div class="producto-delete-warning">
+            Esta acción no afectará pagos reales, solo el registro dentro del mini POS de la feria.
+        </div>
+
+        <dl class="producto-delete-datos">
+            <dt>@Html.DisplayNameFor(m => m.Nombre)</dt>
+            <dd>@Html.DisplayFor(m => m.Nombre)</dd>
+
+            <dt>@Html.DisplayNameFor(m => m.PrecioVenta)</dt>
+            <dd>@Html.DisplayFor(m => m.PrecioVenta)</dd>
+
+            <dt>@Html.DisplayNameFor(m => m.Stock)</dt>
+            <dd>@Html.DisplayFor(m => m.Stock)</dd>
+        </dl>
+
+        @using (Html.BeginForm("Delete", "Productos", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.ProductoId)
+
+            <div class="producto-delete-buttons">
+                <input type="submit" value="Eliminar" class="btn-eliminar" />
+                @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn-cancelar" })
+            </div>
+        }
+    </div>
 </div>
