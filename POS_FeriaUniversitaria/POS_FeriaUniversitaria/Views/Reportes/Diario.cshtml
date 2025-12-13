@@ -1,4 +1,24 @@
-﻿﻿@{
+﻿@*
+    Universidad Tecnológica de Panamá
+    Facultad de Ingeniería en Sistemas Computacionales
+    Licenciatura en Desarrollo y Gestión de Software
+
+    Asignatura - Desarrollo de Software IV
+
+    Proyecto Semestral - Mini POS para Feria Universitaria
+
+    Facilitador: Regis Rivera
+
+    Estudiante:
+    Julio Solís | 8 - 1011 - 1457
+
+    Grupo: 1GS222
+
+    Fecha de entrega: 16 de diciembre de 2025
+    II Semestre | II Año
+*@﻿
+
+@{
     ViewBag.Title = "Reporte Diario / Cierre de Caja";
 }
 
@@ -24,23 +44,21 @@
         box-sizing: border-box;
     }
 
-    /* Ocultamos la línea <hr /> del _Layout debajo del cuerpo */
-    .container.body-content > hr {
-        display: none;
-    }
+        .container.body-content > hr {
+            display: none;
+        }
 
-    /* Footer integrado como continuación del recuadro blanco */
-    .container.body-content > footer {
-        max-width: 1100px;
-        margin: 0 auto;
-        background: #ffffff;
-        border-radius: 0 0 24px 24px;
-        padding: 8px 0 12px 0;
-        box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
-        text-align: center;
-        color: #6c757d;
-        font-size: 0.9rem;
-    }
+        .container.body-content > footer {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 0 0 24px 24px;
+            padding: 8px 0 12px 0;
+            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
 
     /* ================== TARJETA PRINCIPAL DEL REPORTE ================== */
 
@@ -99,15 +117,15 @@
     .reporte-diario-fecha {
         display: flex;
         flex-wrap: wrap;
-        justify-content: center; /* <-- centra el input y el botón */
+        justify-content: center;
         align-items: center;
         gap: 10px;
-        margin: 10px auto 4px auto; /* <-- centra el bloque completo */
+        margin: 10px auto 4px auto;
     }
 
-    .reporte-diario-fecha input[type="date"] {
-        max-width: 230px;
-    }
+        .reporte-diario-fecha input[type="date"] {
+            max-width: 230px;
+        }
 
     .btn-consultar-reporte {
         padding: 8px 22px;
@@ -119,12 +137,12 @@
         box-shadow: 0 10px 18px rgba(105, 26, 92, 0.35);
     }
 
-    .btn-consultar-reporte:hover,
-    .btn-consultar-reporte:focus {
-        background: linear-gradient(135deg, #6A1B9A 0%, #4527A0 100%);
-        border-color: #4A148C;
-        color: #ffffff;
-    }
+        .btn-consultar-reporte:hover,
+        .btn-consultar-reporte:focus {
+            background: linear-gradient(135deg, #6A1B9A 0%, #4527A0 100%);
+            border-color: #4A148C;
+            color: #ffffff;
+        }
 
     .reporte-nota {
         margin: 0;
@@ -137,17 +155,17 @@
         margin-top: 25px;
     }
 
-    .reporte-resultado h3 {
-        color: #691A5C;
-        font-weight: 700;
-        margin-top: 0;
-    }
+        .reporte-resultado h3 {
+            color: #691A5C;
+            font-weight: 700;
+            margin-top: 0;
+        }
 
-    .reporte-resultado h4 {
-        color: #3A0B33;
-        font-weight: 600;
-        margin-top: 24px;
-    }
+        .reporte-resultado h4 {
+            color: #3A0B33;
+            font-weight: 600;
+            margin-top: 24px;
+        }
 
     .reporte-venta-card {
         margin-bottom: 15px;
@@ -167,31 +185,31 @@
         font-size: 0.92rem;
     }
 
-    .tabla-detalle-productos thead th {
-        background: #F3E5F5;
-        color: #3A0B33;
-        padding: 8px 10px;
-        font-weight: 600;
-        border-bottom: 2px solid #E1CFEF;
-    }
+        .tabla-detalle-productos thead th {
+            background: #F3E5F5;
+            color: #3A0B33;
+            padding: 8px 10px;
+            font-weight: 600;
+            border-bottom: 2px solid #E1CFEF;
+        }
 
-    .tabla-detalle-productos tbody tr:nth-child(even) {
-        background-color: #FAF5FF;
-    }
+        .tabla-detalle-productos tbody tr:nth-child(even) {
+            background-color: #FAF5FF;
+        }
 
-    .tabla-detalle-productos th:first-child,
-    .tabla-detalle-productos td:first-child {
-        width: 90px; /* ancho fijo para la columna de imagen */
-        text-align: center;
-    }
+        .tabla-detalle-productos th:first-child,
+        .tabla-detalle-productos td:first-child {
+            width: 90px;
+            text-align: center;
+        }
 
     .img-producto-reporte {
         max-width: 80px;
         max-height: 80px;
         border-radius: 8px;
-        object-fit: cover; /* recorta la imagen manteniendo proporciones */
+        object-fit: cover;
         display: block;
-        margin: 0 auto; /* centrada en su celda */
+        margin: 0 auto;
     }
 
     .reporte-diario-fecha {
@@ -199,10 +217,10 @@
     }
 
 
-        .tabla-detalle-productos th,
-        .tabla-detalle-productos td {
-            font-size: 0.86rem;
-        }
+    .tabla-detalle-productos th,
+    .tabla-detalle-productos td {
+        font-size: 0.86rem;
+    }
 
     body {
         background: linear-gradient(45deg, #3A0B33 0%, #691A5C 100%) !important;
@@ -257,9 +275,22 @@
             // Mensaje temporal mientras llega la respuesta
             document.getElementById("resultado").innerHTML = "<p>Cargando reporte...</p>";
 
-            // Llamada a la API REST (capa API Rest del diagrama)
-            fetch('/api/reportes/diario?fecha=' + encodeURIComponent(fecha))
-                .then(function (r) { return r.json(); })
+            /* Llamada a la API REST (capa API Rest del diagrama)
+               Se usa Url.Content("~/...") para que funcione aunque el proyecto esté
+               publicado en un directorio virtual (evita 404 por ruta absoluta). */
+            var urlApi = '@Url.Content("~/api/reportes/diario")' + '?fecha=' + encodeURIComponent(fecha);
+
+            fetch(urlApi)
+                .then(function (r) {
+                    // Si el servidor devuelve error (400/500), intentamos leer el body para mostrarlo.
+                    if (!r.ok) {
+                        return r.text().then(function (t) {
+                            throw new Error("HTTP " + r.status + " - " + t);
+                        });
+                    }
+                    return r.json();
+                })
+
                 .then(function (data) {
 
                     var html = "";

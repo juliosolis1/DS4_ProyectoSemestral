@@ -1,10 +1,28 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/*
+Universidad Tecnológica de Panamá
+Facultad de Ingeniería en Sistemas Computacionales
+Licenciatura en Desarrollo y Gestión de Software
+
+Asignatura - Desarrollo de Software IV
+
+Proyecto Semestral - Mini POS para Feria Universitaria
+
+Facilitador: Regis Rivera
+
+Estudiante:
+Julio Solís | 8-1011-1457
+
+Grupo: 1GS222
+
+Fecha de entrega: 16 de diciembre de 2025
+II Semestre | II Año
+*/
+
+using System.ComponentModel.DataAnnotations;
 
 namespace POS_FeriaUniversitaria.Web.Models
 {
-    /// <summary>
-    /// Ítem del carrito en sesión (con datos de producto para mostrar).
-    /// </summary>
+    // Ítem del carrito en sesión (con datos de producto para mostrar).
     public class CarritoItemViewModel
     {
         public int ProductoId { get; set; }

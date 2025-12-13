@@ -1,31 +1,40 @@
-﻿using System.Web.Mvc;
+﻿/*
+Universidad Tecnológica de Panamá
+Facultad de Ingeniería en Sistemas Computacionales
+Licenciatura en Desarrollo y Gestión de Software
+
+Asignatura - Desarrollo de Software IV
+
+Proyecto Semestral - Mini POS para Feria Universitaria
+
+Facilitador: Regis Rivera
+
+Estudiante:
+Julio Solís | 8-1011-1457
+
+Grupo: 1GS222
+
+Fecha de entrega: 16 de diciembre de 2025
+II Semestre | II Año
+*/
+
+using System.Web.Mvc;
 
 namespace POS_FeriaUniversitaria.Web.Controllers
 {
-    /// <summary>
-    /// Controlador principal de la aplicación web.
-    /// Maneja la navegación hacia la pantalla principal,
-    /// página de información (About) y página de contacto.
-    /// </summary>
+    /* Controlador principal de la aplicación web.
+       Maneja la navegación hacia la pantalla principal, página de información (About) y página de contacto. */
     public class HomeController : Controller
     {
-        /// <summary>
-        /// Pantalla principal del Mini POS.
-        /// Desde aquí el usuario elige a qué módulo ir:
-        /// Inventario (productos), Nueva Venta, Reporte Diario.
-        /// </summary>
-        /// <returns>Vista Index con el menú principal.</returns>
+        /* Pantalla principal del Mini POS.
+           Desde aquí el usuario elige a qué módulo ir: Inventario (productos), Nueva Venta, Reporte Diario. */
         public ActionResult Index()
         {
             return View();
         }
 
-        /// <summary>
-        /// Página "About" (Acerca de).
-        /// Muestra una descripción del proyecto semestral
-        /// y del desarrollador (Julio Solís).
-        /// </summary>
-        /// <returns>Vista About con información del proyecto.</returns>
+        /* Página "About" (Acerca de).
+           Muestra una descripción del proyecto semestral y del desarrollador (Julio Solís). */
         public ActionResult About()
         {
             // Título que se muestra en la pestaña del navegador
@@ -37,12 +46,8 @@ namespace POS_FeriaUniversitaria.Web.Controllers
             return View();
         }
 
-        /// <summary>
-        /// Página "Contact" (Contacto).
-        /// Muestra los datos de contacto del desarrollador
-        /// para dudas, sugerencias o comentarios sobre el sistema.
-        /// </summary>
-        /// <returns>Vista Contact con la información de contacto.</returns>
+        /* Página "Contact" (Contacto).
+           Muestra los datos de contacto del desarrollador para dudas, sugerencias o comentarios sobre el sistema. */
         public ActionResult Contact()
         {
             ViewBag.Title = "Contacto";

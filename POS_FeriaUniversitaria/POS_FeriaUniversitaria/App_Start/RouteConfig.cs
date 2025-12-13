@@ -12,6 +12,8 @@ namespace POS_FeriaUniversitaria
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            // Evita que el enrutamiento MVC intente resolver las rutas de Web API (api/...).
+            routes.IgnoreRoute("api/{*pathInfo}");
 
             routes.MapRoute(
                 name: "Default",

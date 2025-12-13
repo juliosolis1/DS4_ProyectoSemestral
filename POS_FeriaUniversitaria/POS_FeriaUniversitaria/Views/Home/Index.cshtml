@@ -1,4 +1,24 @@
-﻿@{
+﻿@*
+    Universidad Tecnológica de Panamá
+    Facultad de Ingeniería en Sistemas Computacionales
+    Licenciatura en Desarrollo y Gestión de Software
+
+    Asignatura - Desarrollo de Software IV
+
+    Proyecto Semestral - Mini POS para Feria Universitaria
+
+    Facilitador: Regis Rivera
+
+    Estudiante:
+    Julio Solís | 8 - 1011 - 1457
+
+    Grupo: 1GS222
+
+    Fecha de entrega: 16 de diciembre de 2025
+    II Semestre | II Año
+*@
+
+@{
     ViewBag.Title = "Mini POS - Feria Universitaria";
 }
 
@@ -31,7 +51,7 @@
 
     /* Fondo morado liso + centrado del contenido */
     .body-content {
-        min-height: calc(100vh - 90px);      /* Altura mínima (restando navbar y footer) */
+        min-height: calc(100vh - 90px); /* Altura mínima (restando navbar y footer) */
         display: flex;
         justify-content: center;
         align-items: center;
@@ -70,19 +90,19 @@
         margin-bottom: 20px;
     }
 
-    .pos-header h1 {
-        color: #691A5C;             /* morado UTP */
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 8px;
-        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
-    }
+        .pos-header h1 {
+            color: #691A5C;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+        }
 
-    .pos-header .subtitle {
-        color: #7A7A7A;
-        font-size: 1.1rem;
-        font-weight: 400;
-    }
+        .pos-header .subtitle {
+            color: #7A7A7A;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
 
     /* Línea divisora de color entre el título y las opciones */
     .pos-divider {
@@ -116,14 +136,12 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-
         border-radius: 16px;
         padding: 28px 20px;
         color: #ffffff;
         font-size: 1.15rem;
         font-weight: 600;
         text-decoration: none;
-
         box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
         position: relative;
         overflow: hidden;
@@ -131,74 +149,74 @@
         border: none;
     }
 
-    .pos-module-button span.icon {
-        font-size: 2.4rem;
-        margin-bottom: 10px;
-        display: block;
-    }
+        .pos-module-button span.icon {
+            font-size: 2.4rem;
+            margin-bottom: 10px;
+            display: block;
+        }
 
-    .pos-module-button::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 100%);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
+        .pos-module-button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
 
-    .pos-module-button:hover::before {
-        opacity: 1;
-    }
+        .pos-module-button:hover::before {
+            opacity: 1;
+        }
 
-    .pos-module-button:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
-        text-decoration: none;
-    }
+        .pos-module-button:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+            text-decoration: none;
+        }
 
-    .pos-module-button:active {
-        transform: translateY(-2px);
-    }
+        .pos-module-button:active {
+            transform: translateY(-2px);
+        }
 
-    /* Variantes de color para cada módulo (todas en gama morada) */
+        /* Variantes de color para cada módulo */
 
-    /* INVENTARIO */
-    .pos-module-button.inventory {
-        background: linear-gradient(135deg, #691A5C 0%, #3A0B33 100%);
-        box-shadow: 0 8px 22px rgba(105, 26, 92, 0.55);
-    }
+        /* INVENTARIO */
+        .pos-module-button.inventory {
+            background: linear-gradient(135deg, #691A5C 0%, #3A0B33 100%);
+            box-shadow: 0 8px 22px rgba(105, 26, 92, 0.55);
+        }
 
-    .pos-module-button.inventory:hover {
-        box-shadow: 0 14px 30px rgba(105, 26, 92, 0.75);
-        color: #FFF6FF;
-    }
+            .pos-module-button.inventory:hover {
+                box-shadow: 0 14px 30px rgba(105, 26, 92, 0.75);
+                color: #FFF6FF;
+            }
 
-    /* VENTA */
-    .pos-module-button.sales {
-        background: linear-gradient(135deg, #9C4F84 0%, #691A5C 100%);
-        box-shadow: 0 8px 22px rgba(156, 79, 132, 0.55);
-        color: #FFF6FF;
-    }
+        /* VENTA */
+        .pos-module-button.sales {
+            background: linear-gradient(135deg, #9C4F84 0%, #691A5C 100%);
+            box-shadow: 0 8px 22px rgba(156, 79, 132, 0.55);
+            color: #FFF6FF;
+        }
 
-    .pos-module-button.sales:hover {
-        box-shadow: 0 14px 30px rgba(156, 79, 132, 0.75);
-        color: #FFF6FF;
-    }
+            .pos-module-button.sales:hover {
+                box-shadow: 0 14px 30px rgba(156, 79, 132, 0.75);
+                color: #FFF6FF;
+            }
 
-    /* REPORTE */
-    .pos-module-button.reports {
-        background: linear-gradient(135deg, #9C4F84 0%, #3A0B33 100%);
-        box-shadow: 0 8px 22px rgba(58, 11, 51, 0.55);
-        color: #FFFFFF;
-    }
+        /* REPORTE */
+        .pos-module-button.reports {
+            background: linear-gradient(135deg, #9C4F84 0%, #3A0B33 100%);
+            box-shadow: 0 8px 22px rgba(58, 11, 51, 0.55);
+            color: #FFFFFF;
+        }
 
-    .pos-module-button.reports:hover {
-        box-shadow: 0 14px 30px rgba(58, 11, 51, 0.75);
-        color: #FFFFFF;
-    }
+            .pos-module-button.reports:hover {
+                box-shadow: 0 14px 30px rgba(58, 11, 51, 0.75);
+                color: #FFFFFF;
+            }
 
     /* =========================================================================
        PIE DE PÁGINA INTERNO DE LA TARJETA
@@ -212,10 +230,10 @@
         border-top: 1px solid #e0e0e0;
     }
 
-        .pos-instruction {
-            font-size: 1rem;
-        }
-    
+    .pos-instruction {
+        font-size: 1rem;
+    }
+
 
     /* Ocultar la línea <hr /> que agrega _Layout justo debajo del cuerpo */
     .body-content > hr {

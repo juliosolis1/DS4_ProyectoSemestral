@@ -1,23 +1,46 @@
-﻿using System;
+﻿/*
+Universidad Tecnológica de Panamá
+Facultad de Ingeniería en Sistemas Computacionales
+Licenciatura en Desarrollo y Gestión de Software
+
+Asignatura - Desarrollo de Software IV
+
+Proyecto Semestral - Mini POS para Feria Universitaria
+
+Facilitador: Regis Rivera
+
+Estudiante:
+Julio Solís | 8-1011-1457
+
+Grupo: 1GS222
+
+Fecha de entrega: 16 de diciembre de 2025
+II Semestre | II Año
+*/
+
+using POS_FeriaUniversitaria.AccesoDatos.Entidades;
+using POS_FeriaUniversitaria.AccesoDatos.Infraestructura;
+using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using POS_FeriaUniversitaria.AccesoDatos.Entidades;
-using POS_FeriaUniversitaria.AccesoDatos.Infraestructura;
 
 namespace POS_FeriaUniversitaria.AccesoDatos.Repositorios
 {
-    /// <summary>
-    /// Implementa el CRUD de productos usando ADO.NET "puro".
-    /// La idea es que tú puedas reconocer el patrón de los laboratorios.
-    /// </summary>
+    /* Repositorio de Productos(ADO.NET).
+       - Responsable de ejecutar consultas SQL sobre la tabla Productos.
+       - Implementa CRUD + funciones de historial (eliminación lógica, purga y restauración).
+       - Usa consultas parametrizadas para evitar inyección SQL y garantizar tipos correctos. */
     public class ProductoRepository : IProductoRepository
     {
+        // Consulta el inventario principal: solo productos activos (Activo = 1).
         public List<Producto> Listar()
         {
             var lista = new List<Producto>();
 
             using (SqlConnection cn = ConexionBD.ObtenerConexion())
+            // Se utiliza 'using' para asegurar el cierre/liberación de la conexión y comandos aunque ocurra un error.
             using (SqlCommand cmd = new SqlCommand("SELECT * FROM Productos WHERE Activo = 1", cn))
             {
                 cn.Open();
@@ -25,6 +48,7 @@ namespace POS_FeriaUniversitaria.AccesoDatos.Repositorios
                 {
                     while (dr.Read())
                     {
+                        // Mapeo de cada fila (SqlDataReader) hacia la entidad Producto (capa de Entidades).
                         lista.Add(new Producto
                         {
                             ProductoId = (int)dr["ProductoId"],
@@ -32,11 +56,13 @@ namespace POS_FeriaUniversitaria.AccesoDatos.Repositorios
                             Descripcion = dr["Descripcion"].ToString(),
                             PrecioVenta = (decimal)dr["PrecioVenta"],
                             Stock = (int)dr["Stock"],
+                            // Si ImagenPortada viene NULL en BD, se guarda como null en C# para evitar errores.
                             ImagenPortada = dr["ImagenPortada"] == DBNull.Value
                             ? null
                             : dr["ImagenPortada"].ToString(),
                             Activo = (bool)dr["Activo"],
                             FechaCreacion = (DateTime)dr["FechaCreacion"],
+                            // FechaEliminacion es nullable: si no existe en BD, se asigna null.
                             FechaEliminacion = dr["FechaEliminacion"] == DBNull.Value
                                 ? (DateTime?)null
                                 : (DateTime)dr["FechaEliminacion"]
@@ -48,11 +74,13 @@ namespace POS_FeriaUniversitaria.AccesoDatos.Repositorios
             return lista;
         }
 
+        // Busca un producto por su clave primaria. Retorna null si no se encuentra.
         public Producto ObtenerPorId(int id)
         {
             Producto producto = null;
 
             using (SqlConnection cn = ConexionBD.ObtenerConexion())
+            // Consulta parametrizada (@id) para evitar inyección SQL y problemas de formato.
             using (SqlCommand cmd = new SqlCommand("SELECT * FROM Productos WHERE ProductoId = @id", cn))
             {
                 cmd.Parameters.AddWithValue("@id", id);
@@ -85,7 +113,7 @@ namespace POS_FeriaUniversitaria.AccesoDatos.Repositorios
             return producto;
         }
 
-
+        // Inserta un nuevo producto. Descripcion e ImagenPortada pueden ser opcionales (NULL en BD).
         public void Agregar(Producto producto)
         {
             using (SqlConnection cn = ConexionBD.ObtenerConexion())
@@ -94,6 +122,7 @@ namespace POS_FeriaUniversitaria.AccesoDatos.Repositorios
               VALUES (@Nombre, @Descripcion, @PrecioVenta, @Stock, @Activo, @ImagenPortada)", cn))
             {
                 cmd.Parameters.AddWithValue("@Nombre", producto.Nombre);
+                // Si un campo opcional viene null en C#, se envía DBNull.Value a SQL Server.
                 cmd.Parameters.AddWithValue("@Descripcion", (object)producto.Descripcion ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@PrecioVenta", producto.PrecioVenta);
                 cmd.Parameters.AddWithValue("@Stock", producto.Stock);
@@ -106,6 +135,7 @@ namespace POS_FeriaUniversitaria.AccesoDatos.Repositorios
 
         }
 
+        // Actualiza los datos de un producto existente identificado por ProductoId.
         public void Actualizar(Producto producto)
         {
             using (SqlConnection cn = ConexionBD.ObtenerConexion())
@@ -133,10 +163,12 @@ namespace POS_FeriaUniversitaria.AccesoDatos.Repositorios
 
         }
 
+        // Eliminación lógica: no borra el registro, solo lo oculta del inventario y guarda la fecha.
         public void Eliminar(int id)
         {
             using (SqlConnection cn = ConexionBD.ObtenerConexion())
             using (SqlCommand cmd = new SqlCommand(
+                // GETDATE() registra en BD la fecha/hora exacta en la que se hizo la eliminación.
                 @"UPDATE Productos 
           SET Activo = 0, FechaEliminacion = GETDATE() 
           WHERE ProductoId = @id", cn))
@@ -147,10 +179,12 @@ namespace POS_FeriaUniversitaria.AccesoDatos.Repositorios
             }
         }
 
-        /// Devuelve el historial de productos:
-        /// - Todos los productos activos.
-        /// - Los productos inactivos cuya FechaEliminacion es menor o igual a 30 días.
-        /// Además, limpia automáticamente los inactivos más antiguos de 30 días.
+        /* Devuelve el historial de productos:
+         - Todos los productos activos.
+         - Los productos inactivos cuya FechaEliminacion es menor o igual a 30 días.
+         Además, limpia automáticamente los inactivos más antiguos de 30 días. */
+
+        // Pantalla de Historial: devuelve activos + inactivos recientes y purga inactivos antiguos (>30 días).
         public List<Producto> ListarHistorial()
         {
             var lista = new List<Producto>();
@@ -160,6 +194,7 @@ namespace POS_FeriaUniversitaria.AccesoDatos.Repositorios
                 cn.Open();
 
                 // 1) Limpiar productos inactivos con más de 30 días en el historial
+                // Purga automática: evita que el historial crezca indefinidamente eliminando inactivos muy antiguos.
                 using (SqlCommand cmdPurge = new SqlCommand(
                     @"DELETE FROM Productos
               WHERE Activo = 0
@@ -170,6 +205,7 @@ namespace POS_FeriaUniversitaria.AccesoDatos.Repositorios
                 }
 
                 // 2) Obtener productos activos + inactivos dentro de los 30 días
+                // Consulta combinada: muestra activos y también inactivos dentro del rango permitido (últimos 30 días).
                 using (SqlCommand cmd = new SqlCommand(
                     @"SELECT * 
               FROM Productos
@@ -205,9 +241,10 @@ namespace POS_FeriaUniversitaria.AccesoDatos.Repositorios
             return lista;
         }
 
-        /// Eliminación física: borra la fila de la tabla Productos.
-        /// Se usa desde la pantalla de Historial, cuando el usuario decide
-        /// que ya no quiere recuperar el producto.
+        /* Eliminación física: borra la fila de la tabla Productos.
+           Se usa desde la pantalla de Historial, cuando el usuario decide
+           que ya no quiere recuperar el producto. */
+        // Eliminación definitiva: borra físicamente el producto (acción irreversible).
         public void EliminarDefinitivo(int id)
         {
             using (SqlConnection cn = ConexionBD.ObtenerConexion())
@@ -220,12 +257,12 @@ namespace POS_FeriaUniversitaria.AccesoDatos.Repositorios
             }
         }
 
-        /// <summary>
-        /// Restaura un producto al inventario:
-        /// - Activo = 1
-        /// - FechaEliminacion = NULL
-        /// De esta forma vuelve a aparecer en el listado principal de productos.
-        /// </summary>
+        /* Restaura un producto al inventario:
+           - Activo = 1
+           - FechaEliminacion = NULL
+           De esta forma vuelve a aparecer en el listado principal de productos. */
+
+        // Restaura un producto eliminado lógicamente para que vuelva a aparecer en el inventario.
         public void Restaurar(int id)
         {
             using (SqlConnection cn = ConexionBD.ObtenerConexion())

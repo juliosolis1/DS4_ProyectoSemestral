@@ -1,4 +1,24 @@
-﻿@model POS_FeriaUniversitaria.AccesoDatos.Entidades.Producto
+﻿@*
+    Universidad Tecnológica de Panamá
+    Facultad de Ingeniería en Sistemas Computacionales
+    Licenciatura en Desarrollo y Gestión de Software
+
+    Asignatura - Desarrollo de Software IV
+
+    Proyecto Semestral - Mini POS para Feria Universitaria
+
+    Facilitador: Regis Rivera
+
+    Estudiante:
+    Julio Solís | 8 - 1011 - 1457
+
+    Grupo: 1GS222
+
+    Fecha de entrega: 16 de diciembre de 2025
+    II Semestre | II Año
+*@
+
+@model POS_FeriaUniversitaria.AccesoDatos.Entidades.Producto
 
 @{
     ViewBag.Title = "Editar Producto";
@@ -23,12 +43,10 @@
         box-sizing: border-box;
     }
 
-        /* Ocultamos la línea <hr /> del _Layout debajo del cuerpo */
         .container.body-content > hr {
             display: none;
         }
 
-        /* Footer integrado como parte inferior blanca, pegado al recuadro */
         .container.body-content > footer {
             max-width: 950px;
             margin: 0 auto;
@@ -45,11 +63,10 @@
 
     .producto-form-wrapper {
         max-width: 950px;
-        margin: 0 auto; /* sin margen inferior para que pegue al footer */
+        margin: 0 auto;
         background-color: #ffffff;
         padding: 26px 30px 28px 30px;
         border-radius: 24px 24px 0 0;
-       /* box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);*/
     }
 
     .producto-form-header {
@@ -84,7 +101,7 @@
         flex-wrap: wrap;
         gap: 24px;
         margin-bottom: 20px;
-        justify-content: center; /* centra las columnas dentro de la fila */
+        justify-content: center;
     }
 
     .producto-form-col {
@@ -92,7 +109,7 @@
         min-width: 260px;
         display: flex;
         flex-direction: column;
-        align-items: center; /* títulos + campos centrados en cada columna */
+        align-items: center;
     }
 
     .producto-label {
@@ -119,20 +136,18 @@
             box-shadow: 0 0 0 0.16rem rgba(105, 26, 92, 0.2);
         }
 
-    /* Campo "Nombre del producto": un poco más chico que la columna
-       (aquí puedes cambiar el porcentaje o el max-width a tu gusto) */
+    /* Campo "Nombre del producto" */
     .producto-form-wrapper .producto-input-nombre {
-        width: 75%; /* ≈ quitarle un cuarto del ancho */
-        max-width: 420px; /* límite máximo en pixeles */
+        width: 75%;
+        max-width: 420px;
         margin: 0 auto;
     }
 
-    /* Campos numéricos: Precio de venta y Stock disponible.
-       Los hago pequeñitos, aprox. un cuarto de la columna. */
+    /* Campos numéricos */
     .producto-form-wrapper .producto-input-numero {
-        width: 25%; /* aquí controlas qué tan chico lo quieres */
-        min-width: 120px; /* tamaño mínimo para que se lea bien */
-        max-width: 220px; /* por si la pantalla es muy grande */
+        width: 25%;
+        min-width: 120px;
+        max-width: 220px;
         margin: 0 auto;
         text-align: right;
     }
@@ -173,8 +188,7 @@
         font-size: 0.9rem;
     }
 
-    /* Input de archivo "Seleccionar archivo":
-       mismo ancho que el campo de Nombre del producto. */
+    /* Input de archivo "Seleccionar archivo" */
     .producto-form-wrapper .producto-input-file {
         width: 75%;
         max-width: 420px;
@@ -241,7 +255,6 @@
         gap: 16px;
     }
 
-    /* en móvil dejamos que los campos ocupen casi todo el ancho */
     .producto-input-nombre,
     .producto-input-file {
         width: 100%;
@@ -269,125 +282,125 @@
         @Html.HiddenFor(m => m.ProductoId)
         @Html.HiddenFor(m => m.ImagenPortada)
 
-    <div class="producto-form-wrapper">
-        @* Resumen de errores de validación del modelo *@
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="producto-form-wrapper">
+            @* Resumen de errores de validación del modelo *@
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        @* Fila 1: Nombre del producto (izquierda) y Descripción (centro) *@
-        <div class="producto-form-row">
-            <!-- Columna: Nombre del producto -->
-            <div class="producto-form-col">
-                @Html.LabelFor(m => m.Nombre, htmlAttributes: new { @class = "producto-label" })
-                @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control  producto-input-nombre" })
-                @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
+            @* Fila 1: Nombre del producto (izquierda) y Descripción (centro) *@
+            <div class="producto-form-row">
+                <!-- Columna: Nombre del producto -->
+                <div class="producto-form-col">
+                    @Html.LabelFor(m => m.Nombre, htmlAttributes: new { @class = "producto-label" })
+                    @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control  producto-input-nombre" })
+                    @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- Columna: Descripción -->
+                <div class="producto-form-col">
+                    @Html.LabelFor(m => m.Descripcion, htmlAttributes: new { @class = "producto-label" })
+                    @Html.TextAreaFor(
+                        m => m.Descripcion,
+                        new { @class = "form-control", rows = 3 }
+                    )
+                    @Html.ValidationMessageFor(m => m.Descripcion, "", new { @class = "text-danger" })
+                </div>
             </div>
 
-            <!-- Columna: Descripción -->
-            <div class="producto-form-col">
-                @Html.LabelFor(m => m.Descripcion, htmlAttributes: new { @class = "producto-label" })
-                @Html.TextAreaFor(
-                    m => m.Descripcion,
-                    new { @class = "form-control", rows = 3 }
+            @* Fila 2: Precio de venta (izquierda) y Stock disponible (centro) *@
+            <div class="producto-form-row">
+                <!-- Columna: Precio de venta -->
+                <div class="producto-form-col">
+                    @Html.LabelFor(m => m.PrecioVenta, htmlAttributes: new { @class = "producto-label" })
+                    @Html.TextBoxFor(
+                        m => m.PrecioVenta,
+                        new
+                        {
+                            @class = "form-control producto-input-numero",
+                            type = "number",
+                            step = "0.01",
+                            min = "0"
+                        }
+                    )
+                    @Html.ValidationMessageFor(m => m.PrecioVenta, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- Columna: Stock disponible -->
+                <div class="producto-form-col">
+                    @Html.LabelFor(m => m.Stock, htmlAttributes: new { @class = "producto-label" })
+                    @Html.TextBoxFor(
+                        m => m.Stock,
+                        new
+                        {
+                            @class = "form-control producto-input-numero",
+                            type = "number",
+                            min = "0"
+                        }
+                    )
+                    @Html.ValidationMessageFor(m => m.Stock, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @* Sección: Imagen del producto (opcional) *@
+            @{
+                bool tieneImagen = !string.IsNullOrEmpty(Model.ImagenPortada);
+            }
+
+            <div class="producto-imagen-section">
+                <span class="producto-label">Imagen del producto (opcional)</span>
+
+                <!-- Cuadro de vista previa de la imagen (actual o nueva) -->
+                <div class="producto-imagen-preview" id="previewContainerEdit">
+                    <span id="previewPlaceholderEdit"
+                          class="producto-imagen-placeholder"
+                          style="@(tieneImagen ? "display:none;" : "display:block;")">
+                        Sin imagen seleccionada
+                    </span>
+
+                    <img id="previewImageEdit"
+                         src="@(tieneImagen ? Url.Content(Model.ImagenPortada) : "#")"
+                         alt="Vista previa de la imagen del producto"
+                         style="@(tieneImagen ? "display:block;" : "display:none;")" />
+                </div>
+
+                <!-- Input para seleccionar el archivo de imagen -->
+                <div class="producto-input-file">
+                    <input type="file"
+                           id="imagenPortadaEdit"
+                           name="imagenPortada"
+                           accept="image/*"
+                           class="form-control" />
+                </div>
+
+                <p class="producto-imagen-help">
+                    Si no seleccionas un archivo, se mantendrá la imagen actual. Máximo 10 MB.
+                </p>
+
+                @Html.ValidationMessage("ImagenPortada", "", new { @class = "text-danger" })
+            </div>
+
+            @* Sección: checkbox para indicar si el producto está activo *@
+            <div class="producto-activo-section">
+                <span class="producto-label">Activo</span>
+                <div class="producto-activo-checkbox">
+                    @Html.CheckBoxFor(m => m.Activo)
+                    <span>@Html.DisplayNameFor(m => m.Activo)</span>
+                </div>
+            </div>
+
+            @* Botones de acción *@
+            <div class="producto-form-buttons">
+                <button type="submit" class="btn-guardar">
+                    Guardar producto
+                </button>
+
+                @Html.ActionLink(
+                    "Volver al listado",
+                    "Index",
+                    null,
+                    new { @class = "btn-volver" }
                 )
-                @Html.ValidationMessageFor(m => m.Descripcion, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        @* Fila 2: Precio de venta (izquierda) y Stock disponible (centro) *@
-        <div class="producto-form-row">
-            <!-- Columna: Precio de venta -->
-            <div class="producto-form-col">
-                @Html.LabelFor(m => m.PrecioVenta, htmlAttributes: new { @class = "producto-label" })
-                @Html.TextBoxFor(
-                    m => m.PrecioVenta,
-                    new
-                    {
-                        @class = "form-control producto-input-numero",
-                        type = "number",
-                        step = "0.01",
-                        min = "0"
-                    }
-                )
-                @Html.ValidationMessageFor(m => m.PrecioVenta, "", new { @class = "text-danger" })
-            </div>
-
-            <!-- Columna: Stock disponible -->
-            <div class="producto-form-col">
-                @Html.LabelFor(m => m.Stock, htmlAttributes: new { @class = "producto-label" })
-                @Html.TextBoxFor(
-                    m => m.Stock,
-                    new
-                    {
-                        @class = "form-control producto-input-numero",
-                        type = "number",
-                        min = "0"
-                    }
-                )
-                @Html.ValidationMessageFor(m => m.Stock, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        @* Sección: Imagen del producto (opcional) *@
-        @{
-            bool tieneImagen = !string.IsNullOrEmpty(Model.ImagenPortada);
-        }
-
-        <div class="producto-imagen-section">
-            <span class="producto-label">Imagen del producto (opcional)</span>
-
-            <!-- Cuadro de vista previa de la imagen (actual o nueva) -->
-            <div class="producto-imagen-preview" id="previewContainerEdit">
-                <span id="previewPlaceholderEdit"
-                      class="producto-imagen-placeholder"
-                      style="@(tieneImagen ? "display:none;" : "display:block;")">
-                    Sin imagen seleccionada
-                </span>
-
-                <img id="previewImageEdit"
-                     src="@(tieneImagen ? Url.Content(Model.ImagenPortada) : "#")"
-                     alt="Vista previa de la imagen del producto"
-                     style="@(tieneImagen ? "display:block;" : "display:none;")" />
-            </div>
-
-            <!-- Input para seleccionar el archivo de imagen -->
-            <div class="producto-input-file">
-                <input type="file"
-                       id="imagenPortadaEdit"
-                       name="imagenPortada"
-                       accept="image/*"
-                       class="form-control" />
-            </div>
-
-            <p class="producto-imagen-help">
-                Si no seleccionas un archivo, se mantendrá la imagen actual. Máximo 10 MB.
-            </p>
-
-            @Html.ValidationMessage("ImagenPortada", "", new { @class = "text-danger" })
-        </div>
-
-        @* Sección: checkbox para indicar si el producto está activo *@
-        <div class="producto-activo-section">
-            <span class="producto-label">Activo</span>
-            <div class="producto-activo-checkbox">
-                @Html.CheckBoxFor(m => m.Activo)
-                <span>@Html.DisplayNameFor(m => m.Activo)</span>
-            </div>
-        </div>
-
-        @* Botones de acción *@
-        <div class="producto-form-buttons">
-            <button type="submit" class="btn-guardar">
-                Guardar producto
-            </button>
-
-            @Html.ActionLink(
-                "Volver al listado",
-                "Index",
-                null,
-                new { @class = "btn-volver" }
-            )
-        </div>
-    </div>
     </div>
 
 }
@@ -396,9 +409,9 @@
     @Scripts.Render("~/bundles/jqueryval")
 
     <script type="text/javascript">
-        // Script para mostrar una vista previa de la nueva imagen
-        // seleccionada en el input "imagenPortadaEdit" sin perder
-        // la imagen actual mientras no se elija archivo.
+        /* Script para mostrar una vista previa de la nueva imagen
+           seleccionada en el input "imagenPortadaEdit" sin perder
+           la imagen actual mientras no se elija archivo. */
         (function () {
             var inputFile = document.getElementById("imagenPortadaEdit");
             if (!inputFile) return;
@@ -409,8 +422,8 @@
             inputFile.addEventListener("change", function () {
                 var file = this.files && this.files[0];
 
-                // Si el usuario no selecciona archivo, no cambiamos la vista previa:
-                // se mantiene la imagen actual o el placeholder.
+                /* Si el usuario no selecciona archivo, no cambiamos la vista previa:
+                   se mantiene la imagen actual o el placeholder. */
                 if (!file) {
                     return;
                 }

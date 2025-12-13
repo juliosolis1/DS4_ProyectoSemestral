@@ -1,13 +1,36 @@
-﻿@model POS_FeriaUniversitaria.AccesoDatos.Entidades.Producto
+﻿@*
+    Universidad Tecnológica de Panamá
+    Facultad de Ingeniería en Sistemas Computacionales
+    Licenciatura en Desarrollo y Gestión de Software
 
+    Asignatura - Desarrollo de Software IV
+
+    Proyecto Semestral - Mini POS para Feria Universitaria
+
+    Facilitador: Regis Rivera
+
+    Estudiante:
+    Julio Solís | 8 - 1011 - 1457
+
+    Grupo: 1GS222
+
+    Fecha de entrega: 16 de diciembre de 2025
+    II Semestre | II Año
+*@
+
+@model POS_FeriaUniversitaria.AccesoDatos.Entidades.Producto
+
+@* Título de la pestaña/encabezado (Layout) para identificar la vista actual. *@
 @{
     ViewBag.Title = "Eliminar Producto";
 }
 
 @*
     Vista: Delete (Eliminar Producto)
-    Esta vista muestra un recuadro flotante centrado con los datos del producto
-    y pide confirmación antes de eliminarlo del inventario.
+    - Muestra los datos básicos del producto seleccionado.
+    - Solicita confirmación antes de ejecutar la eliminación lógica (Activo = 0).
+    - Envía un POST seguro a Productos/Delete usando AntiForgeryToken (protección CSRF).
+    - El ProductoId viaja oculto (HiddenFor) para identificar qué registro se eliminará.
 *@
 
 <style>
@@ -27,29 +50,27 @@
         box-sizing: border-box;
     }
 
-    /* Ocultamos la línea <hr /> del _Layout debajo del cuerpo */
-    .container.body-content > hr {
-        display: none;
-    }
+        .container.body-content > hr {
+            display: none;
+        }
 
-    /* Footer integrado como parte inferior blanca, pegado al recuadro */
-    .container.body-content > footer {
-        max-width: 950px;
-        margin: 0 auto;
-        background: #ffffff;
-        border-radius: 0 0 24px 24px;
-        padding: 8px 0 12px 0;
-        box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
-        text-align: center;
-        color: #6c757d;
-        font-size: 0.9rem;
-    }
+        .container.body-content > footer {
+            max-width: 950px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 0 0 24px 24px;
+            padding: 8px 0 12px 0;
+            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
 
     /* ================== TARJETA DE CONFIRMACIÓN ================== */
 
     .producto-delete-wrapper {
         max-width: 950px;
-        margin: 0 auto;   /* centrado horizontal */
+        margin: 0 auto;
     }
 
     .producto-delete-card {
@@ -93,16 +114,16 @@
         margin-bottom: 24px;
     }
 
-    .producto-delete-datos dt {
-        font-weight: 600;
-        color: #495057;
-    }
+        .producto-delete-datos dt {
+            font-weight: 600;
+            color: #495057;
+        }
 
-    .producto-delete-datos dd {
-        margin-left: 0;
-        color: #343a40;
-        word-break: break-word;
-    }
+        .producto-delete-datos dd {
+            margin-left: 0;
+            color: #343a40;
+            word-break: break-word;
+        }
 
     /* ================== BOTONES ================== */
 
@@ -124,33 +145,32 @@
         margin: 0 6px;
     }
 
-    /* Botón rojo (Eliminar) */
     .btn-eliminar {
         background-color: #dc3545;
         color: #ffffff;
     }
 
-    .btn-eliminar:hover {
-        background-color: #c82333;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 10px rgba(220, 53, 69, 0.35);
-    }
+        .btn-eliminar:hover {
+            background-color: #c82333;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.35);
+        }
 
-    /* Botón gris (Cancelar, similar a "Volver al listado") */
     .btn-cancelar {
         background-color: #e9ecef;
         color: #495057;
     }
 
         .btn-cancelar:hover {
-            background-color: #707070; /* fondo negro más marcado */
-            color: #ffffff !important; /* texto blanco, sin tono azul */
+            background-color: #707070;
+            color: #ffffff !important;
             transform: translateY(-1px);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
             text-decoration: none;
         }
 </style>
 
+@* Contenedor principal: centra la tarjeta blanca sobre el fondo degradado morado. *@
 <div class="producto-delete-wrapper">
     <div class="producto-delete-card">
         <h2 class="producto-delete-title">Eliminar producto</h2>
@@ -162,6 +182,7 @@
             Esta acción no afectará pagos reales, solo el registro dentro del mini POS de la feria.
         </div>
 
+        @* Datos del producto: se usan DisplayNameFor/DisplayFor para respetar nombres/formato del modelo. *@
         <dl class="producto-delete-datos">
             <dt>@Html.DisplayNameFor(m => m.Nombre)</dt>
             <dd>@Html.DisplayFor(m => m.Nombre)</dd>
@@ -173,15 +194,20 @@
             <dd>@Html.DisplayFor(m => m.Stock)</dd>
         </dl>
 
+        @* Datos del producto: se usan DisplayNameFor/DisplayFor para respetar nombres/formato del modelo. *@
         @using (Html.BeginForm("Delete", "Productos", FormMethod.Post))
         {
+            @* Token Anti-CSRF: evita que un tercero ejecute el POST desde otra página. *@
             @Html.AntiForgeryToken()
+            @* ID oculto: permite identificar el producto a eliminar sin mostrarlo en pantalla. *@
             @Html.HiddenFor(m => m.ProductoId)
 
-            <div class="producto-delete-buttons">
-                <input type="submit" value="Eliminar" class="btn-eliminar" />
-                @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn-cancelar" })
-            </div>
+    <div class="producto-delete-buttons">
+        @* Submit: al presionar "Eliminar" se ejecuta el POST del formulario. *@
+        <input type="submit" value="Eliminar" class="btn-eliminar" />
+        @* Cancelar: regresa al listado (Index) sin realizar cambios en la base de datos. *@
+        @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn-cancelar" })
+    </div>
         }
     </div>
 </div>

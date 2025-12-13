@@ -1,4 +1,24 @@
-﻿@model POS_FeriaUniversitaria.AccesoDatos.Entidades.Producto
+﻿@*
+    Universidad Tecnológica de Panamá
+    Facultad de Ingeniería en Sistemas Computacionales
+    Licenciatura en Desarrollo y Gestión de Software
+
+    Asignatura - Desarrollo de Software IV
+
+    Proyecto Semestral - Mini POS para Feria Universitaria
+
+    Facilitador: Regis Rivera
+
+    Estudiante:
+    Julio Solís | 8 - 1011 - 1457
+
+    Grupo: 1GS222
+
+    Fecha de entrega: 16 de diciembre de 2025
+    II Semestre | II Año
+*@
+
+@model POS_FeriaUniversitaria.AccesoDatos.Entidades.Producto
 
 @{
     ViewBag.Title = "Nuevo Producto";
@@ -25,29 +45,27 @@
         box-sizing: border-box;
     }
 
-    /* Ocultamos la línea <hr /> del _Layout debajo del cuerpo */
-    .container.body-content > hr {
-        display: none;
-    }
+        .container.body-content > hr {
+            display: none;
+        }
 
-    /* Footer integrado como parte inferior blanca, pegado al recuadro */
-    .container.body-content > footer {
-        max-width: 950px;
-        margin: 0 auto;
-        background: #ffffff;
-        border-radius: 0 0 24px 24px;
-        padding: 8px 0 12px 0;
-        box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
-        text-align: center;
-        color: #6c757d;
-        font-size: 0.9rem;
-    }
+        .container.body-content > footer {
+            max-width: 950px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 0 0 24px 24px;
+            padding: 8px 0 12px 0;
+            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
 
     /* ================== TARJETA DEL FORMULARIO ================== */
 
     .producto-form-wrapper {
         max-width: 950px;
-        margin: 0 auto;  /* sin margen inferior para que pegue al footer */
+        margin: 0 auto;
         background-color: #ffffff;
         padding: 26px 30px 28px 30px;
         border-radius: 24px 24px 0 0;
@@ -86,7 +104,7 @@
         flex-wrap: wrap;
         gap: 24px;
         margin-bottom: 20px;
-        justify-content: center;   /* centra las columnas dentro de la fila */
+        justify-content: center;
     }
 
     .producto-form-col {
@@ -94,7 +112,7 @@
         min-width: 260px;
         display: flex;
         flex-direction: column;
-        align-items: center;       /* títulos + campos centrados en cada columna */
+        align-items: center;
     }
 
     .producto-label {
@@ -116,25 +134,23 @@
         max-width: 100%;
     }
 
-    .producto-form-wrapper .form-control:focus {
-        border-color: #691A5C;
-        box-shadow: 0 0 0 0.16rem rgba(105, 26, 92, 0.2);
-    }
+        .producto-form-wrapper .form-control:focus {
+            border-color: #691A5C;
+            box-shadow: 0 0 0 0.16rem rgba(105, 26, 92, 0.2);
+        }
 
-    /* Campo "Nombre del producto": un poco más chico que la columna
-       (aquí puedes cambiar el porcentaje o el max-width a tu gusto) */
+    /* Campo "Nombre del producto" */
     .producto-form-wrapper .producto-input-nombre {
-        width: 75%; /* ≈ quitarle un cuarto del ancho */
-        max-width: 420px; /* límite máximo en pixeles */
+        width: 75%;
+        max-width: 420px;
         margin: 0 auto;
     }
 
-    /* Campos numéricos: Precio de venta y Stock disponible.
-       Los hago pequeñitos, aprox. un cuarto de la columna. */
+    /* Campos numéricos: Precio de venta y Stock disponible. */
     .producto-form-wrapper .producto-input-numero {
-        width: 25%; /* aquí controlas qué tan chico lo quieres */
-        min-width: 120px; /* tamaño mínimo para que se lea bien */
-        max-width: 220px; /* por si la pantalla es muy grande */
+        width: 25%;
+        min-width: 120px;
+        max-width: 220px;
         margin: 0 auto;
         text-align: right;
     }
@@ -147,9 +163,9 @@
         text-align: center;
     }
 
-    .producto-imagen-section .producto-label {
-        margin-bottom: 10px;
-    }
+        .producto-imagen-section .producto-label {
+            margin-bottom: 10px;
+        }
 
     .producto-imagen-preview {
         width: 240px;
@@ -164,19 +180,18 @@
         overflow: hidden;
     }
 
-    .producto-imagen-preview img {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
-    }
+        .producto-imagen-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
 
     .producto-imagen-placeholder {
         color: #999999;
         font-size: 0.9rem;
     }
 
-    /* Input de archivo "Seleccionar archivo":
-       mismo ancho que el campo de Nombre del producto. */
+    /* Input de archivo "Seleccionar archivo" */
     .producto-form-wrapper .producto-input-file {
         width: 75%;
         max-width: 420px;
@@ -218,11 +233,11 @@
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
     }
 
-    .btn-guardar:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 10px 22px rgba(105, 26, 92, 0.38);
-        color: #ffffff;
-    }
+        .btn-guardar:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 22px rgba(105, 26, 92, 0.38);
+            color: #ffffff;
+        }
 
     .btn-volver {
         background-color: #e9ecef;
@@ -230,31 +245,29 @@
         border: 1px solid #ced4da;
     }
 
-    .btn-volver:hover {
-        background-color: #dde1e4;
-        color: #343a40;
+        .btn-volver:hover {
+            background-color: #dde1e4;
+            color: #343a40;
+        }
+
+    .producto-form-title {
+        font-size: 1.6rem;
     }
 
-        .producto-form-title {
-            font-size: 1.6rem;
-        }
+    .producto-form-row {
+        gap: 16px;
+    }
 
-        .producto-form-row {
-            gap: 16px;
-        }
+    .producto-input-nombre,
+    .producto-input-file {
+        width: 100%;
+        max-width: 100%;
+    }
 
-        /* en móvil dejamos que los campos ocupen casi todo el ancho */
-        .producto-input-nombre,
-        .producto-input-file {
-            width: 100%;
-            max-width: 100%;
-        }
-
-        .producto-input-numero {
-            width: 100%;
-            max-width: 200px;
-        }
-    
+    .producto-input-numero {
+        width: 100%;
+        max-width: 200px;
+    }
 </style>
 
 @using (Html.BeginForm("Create", "Productos", FormMethod.Post, new { enctype = "multipart/form-data" }))

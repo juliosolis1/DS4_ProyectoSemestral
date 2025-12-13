@@ -1,4 +1,24 @@
-﻿﻿@using POS_FeriaUniversitaria.Web.Models
+﻿@*
+    Universidad Tecnológica de Panamá
+    Facultad de Ingeniería en Sistemas Computacionales
+    Licenciatura en Desarrollo y Gestión de Software
+
+    Asignatura - Desarrollo de Software IV
+
+    Proyecto Semestral - Mini POS para Feria Universitaria
+
+    Facilitador: Regis Rivera
+
+    Estudiante:
+    Julio Solís | 8 - 1011 - 1457
+
+    Grupo: 1GS222
+
+    Fecha de entrega: 16 de diciembre de 2025
+    II Semestre | II Año
+*@﻿
+
+@using POS_FeriaUniversitaria.Web.Models
 @model CarritoViewModel
 
 @{
@@ -35,28 +55,26 @@
         box-sizing: border-box;
     }
 
-    /* Ocultamos la línea <hr /> del _Layout debajo del cuerpo */
-    .container.body-content > hr {
-        display: none;
-    }
+        .container.body-content > hr {
+            display: none;
+        }
 
-    /* Footer integrado como continuación del recuadro blanco */
-    .container.body-content > footer {
-        max-width: 1100px;
-        margin: 0 auto;
-        background: #ffffff;
-        border-radius: 0 0 24px 24px;
-        padding: 8px 0 12px 0;
-        box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
-        text-align: center;
-        color: #6c757d;
-        font-size: 0.9rem;
-    }
+        .container.body-content > footer {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 0 0 24px 24px;
+            padding: 8px 0 12px 0;
+            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
 
     /* Tarjeta blanca principal de la vista */
     .venta-wrapper {
         max-width: 1100px;
-        margin: 0 auto;              /* centrado */
+        margin: 0 auto;
         background: #ffffff;
         border-radius: 24px 24px 0 0;
         box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
@@ -102,31 +120,29 @@
         box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
     }
 
-    .venta-panel > .panel-heading {
-        background: linear-gradient(90deg, #691A5C, #9C4F84);
-        color: #ffffff;
-        font-weight: 600;
-        border-radius: 16px 16px 0 0;
-        padding: 10px 16px;
-        font-size: 1rem;
-    }
+        .venta-panel > .panel-heading {
+            background: linear-gradient(90deg, #691A5C, #9C4F84);
+            color: #ffffff;
+            font-weight: 600;
+            border-radius: 16px 16px 0 0;
+            padding: 10px 16px;
+            font-size: 1rem;
+        }
 
-    .venta-panel > .panel-body {
-        padding: 16px 20px 18px 20px;
-    }
+        .venta-panel > .panel-body {
+            padding: 16px 20px 18px 20px;
+        }
 
-    /* FILA: selector de producto + cantidad + botón Agregar */
     .venta-seleccion-row {
-        display: flex;               /* todo en una sola fila */
-        justify-content: center;     /* centrado horizontal */
-        align-items: center;         /* alineado vertical */
-        gap: 12px;                   /* espacio entre los tres controles */
+        display: flex;
+        justify-content: center; 
+        align-items: center; 
+        gap: 12px; 
         margin-top: 6px;
         margin-bottom: 4px;
-        flex-wrap: wrap;             /* por si la pantalla es pequeña */
+        flex-wrap: wrap; 
     }
 
-        /* Ancho mínimo del combo de productos */
         .venta-seleccion-row select[name="productoId"] {
             min-width: 320px;
         }
@@ -170,14 +186,14 @@
             transition: background-color 0.15s ease, box-shadow 0.15s ease;
         }
 
-        .venta-table tbody tr:nth-child(even) {
-            background: #FBF7FF;
-        }
+            .venta-table tbody tr:nth-child(even) {
+                background: #FBF7FF;
+            }
 
-        .venta-table tbody tr:hover {
-            background-color: #F5EBFF;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.10);
-        }
+            .venta-table tbody tr:hover {
+                background-color: #F5EBFF;
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.10);
+            }
 
         .venta-table td {
             padding: 9px 12px;
@@ -275,7 +291,7 @@
     }
 
         .venta-observaciones textarea {
-            width: 100%;          /* que use todo el ancho disponible */
+            width: 100%; 
             max-width: 100%;
             min-height: 90px;
         }
@@ -283,21 +299,21 @@
         .venta-observaciones .btn-registrar-venta {
             display: block;
             margin-left: auto;
-            margin-right: auto;   /* centrado */
+            margin-right: auto; 
         }
 
-        .venta-title {
-            font-size: 1.6rem;
-        }
+    .venta-title {
+        font-size: 1.6rem;
+    }
 
-        .venta-table thead th,
-        .venta-table tbody td {
-            font-size: 0.9rem;
-        }
+    .venta-table thead th,
+    .venta-table tbody td {
+        font-size: 0.9rem;
+    }
 
-        body {
+    body {
         background: linear-gradient(45deg, #3A0B33 0%, #691A5C 100%) !important;
-        }
+    }
 </style>
 
 <div class="venta-wrapper">

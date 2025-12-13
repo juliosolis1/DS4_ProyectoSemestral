@@ -1,17 +1,38 @@
-﻿@model IEnumerable<POS_FeriaUniversitaria.AccesoDatos.Entidades.Producto>
+﻿@*
+    Universidad Tecnológica de Panamá
+    Facultad de Ingeniería en Sistemas Computacionales
+    Licenciatura en Desarrollo y Gestión de Software
 
+    Asignatura - Desarrollo de Software IV
+
+    Proyecto Semestral - Mini POS para Feria Universitaria
+
+    Facilitador: Regis Rivera
+
+    Estudiante:
+    Julio Solís | 8 - 1011 - 1457
+
+    Grupo: 1GS222
+
+    Fecha de entrega: 16 de diciembre de 2025
+    II Semestre | II Año
+*@
+
+@model IEnumerable<POS_FeriaUniversitaria.AccesoDatos.Entidades.Producto>
+
+@* Título de la pestaña/encabezado (Layout) para indicar que estamos en Historial. *@
 @{
     ViewBag.Title = "Historial de productos";
 }
 
 @*
     Vista: Historial de productos
-    - Muestra productos activos y eliminados en los últimos 30 días.
-    - Diseño consistente con las demás pantallas (tarjeta blanca sobre fondo morado).
-    - CSS local en este mismo archivo, como pidió el profesor.
+    - Muestra productos activos y los eliminados en los últimos 30 días.
+    - Permite dos acciones sobre eliminados: Restaurar o Eliminar definitivamente.
+    - Usa formularios POST con AntiForgeryToken para acciones sensibles.
+    - La limpieza automática (>30 días) se realiza en la capa de datos (Repositorio).
 *@
 <style>
-    /* Ajuste del contenedor principal que viene del _Layout */
     .container.body-content {
         max-width: 100% !important;
         width: 100%;
@@ -21,12 +42,11 @@
         box-sizing: border-box;
     }
 
-    /* Tarjeta blanca flotando sobre el fondo morado */
     .historial-wrapper {
         max-width: 1100px;
-        margin: 0 auto; /* sin margen abajo para pegar al footer */
+        margin: 0 auto;
         background: #ffffff;
-        border-radius: 24px 24px 0 0; /* arriba redondeado, abajo recto */
+        border-radius: 24px 24px 0 0;
         box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
         padding: 30px 36px 26px 36px;
     }
@@ -37,9 +57,10 @@
         margin-bottom: 18px;
     }
 
+    /* Ajuste final de tamaños (título/subtítulo) para que el encabezado no se vea excesivo en pantalla. */
     .historial-title {
         margin: 0;
-        font-size: 2.2rem;
+        font-size: 1.6rem;
         font-weight: 800;
         color: #5A1048;
     }
@@ -59,7 +80,6 @@
         background: linear-gradient(90deg, #E5C4E5 0%, #F3DFFF 50%, #E5C4E5 100%);
     }
 
-    /* Contenedor de tabla (para scroll horizontal en pantallas pequeñas) */
     .historial-table-container {
         width: 100%;
         overflow-x: auto;
@@ -80,24 +100,23 @@
             font-weight: 600;
             padding: 10px 14px;
             border-bottom: 2px solid #E4D4F1;
-            white-space: normal; /* permite saltos de línea */
-            word-wrap: break-word; /* si un título es largo, se parte y no forza scroll */
+            white-space: normal;
+            word-wrap: break-word;
         }
 
+        .historial-table tbody td {
+            padding: 9px 14px;
+            border-bottom: 1px solid #F0F0F5;
+            vertical-align: middle;
+        }
 
-    .historial-table tbody td {
-        padding: 9px 14px;
-        border-bottom: 1px solid #F0F0F5;
-        vertical-align: middle;
-    }
+        .historial-table tbody tr:nth-child(even) {
+            background-color: #FCF8FF;
+        }
 
-    .historial-table tbody tr:nth-child(even) {
-        background-color: #FCF8FF;
-    }
-
-    .historial-table tbody tr:hover {
-        background-color: #F3E9FF;
-    }
+        .historial-table tbody tr:hover {
+            background-color: #F3E9FF;
+        }
 
     /* Columna de acciones algo más estrecha */
     .historial-col-acciones {
@@ -139,10 +158,10 @@
         justify-content: center;
     }
 
-    .acciones-historial form {
-        margin: 0;
-        display: inline-block;
-    }
+        .acciones-historial form {
+            margin: 0;
+            display: inline-block;
+        }
 
     /* Botones */
     .btn-editar,
@@ -162,7 +181,7 @@
 
     .btn-editar {
         background-color: #FFC107;
-        color: #ffffff; /* texto blanco */
+        color: #ffffff;
     }
 
         .btn-editar:hover {
@@ -176,15 +195,15 @@
         color: #ffffff;
     }
 
-    .btn-restaurar:hover {
-        background-color: #157347;
-        color: #ffffff;
-    }
+        .btn-restaurar:hover {
+            background-color: #157347;
+            color: #ffffff;
+        }
 
     .btn-eliminar-definitivo {
         background-color: #DC3545;
         color: #ffffff;
-        padding: 6px 14px; /* un poco más pequeño que el resto */
+        padding: 6px 14px;
         font-size: 0.8rem;
     }
 
@@ -200,11 +219,11 @@
         font-size: 0.9rem;
     }
 
-    .btn-volver-inventario:hover {
-        background-color: #E0E0E0;
-        color: #111111;
-        text-decoration: none;
-    }
+        .btn-volver-inventario:hover {
+            background-color: #E0E0E0;
+            color: #111111;
+            text-decoration: none;
+        }
 
     /* Sección inferior con el botón "Volver al inventario" */
     .volver-inventario-container {
@@ -214,34 +233,27 @@
         text-align: center;
     }
 
-        .historial-title {
-            font-size: 1.6rem;
-        }
-
-        .historial-subtitle {
-            font-size: 0.9rem;
-        }
+    .historial-subtitle {
+        font-size: 0.9rem;
+    }
 
     /* --------- Footer integrado al recuadro del historial --------- */
 
-    /* Ocultamos la línea <hr /> del _Layout debajo del cuerpo */
     .container.body-content > hr {
         display: none;
     }
 
-    /* Hacemos que el footer continúe el recuadro blanco del historial */
     .container.body-content > footer {
         max-width: 1100px;
         margin: 0 auto;
         background: #ffffff;
-        border-radius: 0 0 24px 24px; /* esquinas inferiores redondeadas */
+        border-radius: 0 0 24px 24px;
         padding: 8px 0 12px 0;
         box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
         text-align: center;
         color: #6c757d;
         font-size: 0.9rem;
     }
-    
 </style>
 
 <div class="historial-wrapper">
@@ -269,80 +281,89 @@
                 </tr>
             </thead>
             <tbody>
+                @* Recorre cada producto del historial para construir filas de la tabla y mostrar su estado. *@
                 @foreach (var item in Model)
                 {
+                    @* Define la clase CSS del badge según el estado: eliminado / no disponible (stock 0) / en inventario. *@
                     var estadoClase = !item.Activo
                         ? "estado-eliminado"
                         : (item.Stock <= 0 ? "estado-no-disponible" : "estado-inventario");
 
+                    @* Texto visible del estado que acompaña al badge (mismo criterio de estadoClase). *@
                     var estadoTexto = !item.Activo
                         ? "Eliminado"
                         : (item.Stock <= 0 ? "No disponible" : "En inventario");
 
-                    <tr>
-                        <td>@item.Nombre</td>
-                        <td>@item.PrecioVenta.ToString("C")</td>
-                        <td>@item.Stock</td>
-                        <td>
-                            <span class="estado-badge @estadoClase">
-                                @estadoTexto
-                            </span>
-                        </td>
-                        <td>
-                            @item.FechaCreacion.ToString("dd/MM/yyyy HH:mm")
-                        </td>
-                        <td>
-                            @(item.FechaEliminacion.HasValue
+                <tr>
+                    <td>@item.Nombre</td>
+                    @* Formato moneda: "C" muestra el precio según la configuración regional del servidor. *@
+                    <td>@item.PrecioVenta.ToString("C")</td>
+                    <td>@item.Stock</td>
+                    <td>
+                        <span class="estado-badge @estadoClase">
+                            @estadoTexto
+                        </span>
+                    </td>
+                    <td>
+                        @item.FechaCreacion.ToString("dd/MM/yyyy HH:mm")
+                    </td>
+                    <td>
+                        @* Fecha de eliminación: si no existe (NULL), se muestra "-" para indicar “no aplica”. *@
+                        @(item.FechaEliminacion.HasValue
                                 ? item.FechaEliminacion.Value.ToString("dd/MM/yyyy HH:mm")
                                 : "-")
-                        </td>
-                        <td class="historial-col-acciones">
-                            @if (!item.Activo)
-                            {
-                                <div class="acciones-historial">
-                                    @* Botón RESTAURAR al inventario *@
-                                    @using (Html.BeginForm(
-                                        "Restaurar",
-                                        "Productos",
-                                        new { id = item.ProductoId },
-                                        FormMethod.Post,
-                                        new { @class = "form-inline" }))
-                                    {
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit" class="btn-restaurar">
-                                            Restaurar
-                                        </button>
-                                    }
-
-                                    @* Botón ELIMINAR DEFINITIVAMENTE *@
-                                    @using (Html.BeginForm(
-                                        "EliminarDefinitivo",
-                                        "Productos",
-                                        new { id = item.ProductoId },
-                                        FormMethod.Post,
-                                        new
-                                        {
-                                            @class = "form-inline",
-                                            onsubmit = "return confirm('¿Seguro que deseas eliminar definitivamente este producto? Esta acción no se puede deshacer.');"
-                                        }))
-                                    {
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit" class="btn-eliminar-definitivo">
-                                            Eliminar definitivamente
-                                        </button>
-                                    }
-                                </div>
-                            }
-                            else
-                            {
-                                @Html.ActionLink(
-                                    "Editar",
-                                    "Edit",
+                    </td>
+                    <td class="historial-col-acciones">
+                        @* Si el producto está eliminado (Activo = false), se muestran acciones: Restaurar o Eliminar definitivamente. *@
+                        @if (!item.Activo)
+                        {
+                            <div class="acciones-historial">
+                                @* Botón RESTAURAR al inventario *@
+                                @using (Html.BeginForm(
+                                    "Restaurar",
+                                    "Productos",
                                     new { id = item.ProductoId },
-                                    new { @class = "btn-editar" })
-                            }
-                        </td>
-                    </tr>
+                                    FormMethod.Post,
+                                    new { @class = "form-inline" }))
+                                {
+                                    @* AntiForgeryToken: protege la acción POST Restaurar contra CSRF. *@
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn-restaurar">
+                                        Restaurar
+                                    </button>
+                                }
+
+                                @* Botón ELIMINAR DEFINITIVAMENTE *@
+                                @using (Html.BeginForm(
+                                    "EliminarDefinitivo",
+                                    "Productos",
+                                    new { id = item.ProductoId },
+                                    FormMethod.Post,
+                                    new
+                                    {
+                                        @class = "form-inline",
+                                        onsubmit = "return confirm('¿Seguro que deseas eliminar definitivamente este producto? Esta acción no se puede deshacer.');"
+                                    }))
+                                {
+                                    @* AntiForgeryToken: protege la acción POST EliminarDefinitivo contra CSRF. *@
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn-eliminar-definitivo">
+                                        Eliminar definitivamente
+                                    </button>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            @* Si el producto está activo, se permite Editar (no se muestran acciones de restauración/borrado físico). *@
+                            @Html.ActionLink(
+                                "Editar",
+                                "Edit",
+                                new { id = item.ProductoId },
+                                new { @class = "btn-editar" })
+                        }
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>

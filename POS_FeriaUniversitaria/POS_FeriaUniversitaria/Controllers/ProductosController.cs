@@ -1,4 +1,24 @@
-﻿using System;
+﻿/*
+Universidad Tecnológica de Panamá
+Facultad de Ingeniería en Sistemas Computacionales
+Licenciatura en Desarrollo y Gestión de Software
+
+Asignatura - Desarrollo de Software IV
+
+Proyecto Semestral - Mini POS para Feria Universitaria
+
+Facilitador: Regis Rivera
+
+Estudiante:
+Julio Solís | 8-1011-1457
+
+Grupo: 1GS222
+
+Fecha de entrega: 16 de diciembre de 2025
+II Semestre | II Año
+*/
+
+using System;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
@@ -8,10 +28,8 @@ using POS_FeriaUniversitaria.Servicios.Interfaces;
 
 namespace POS_FeriaUniversitaria.Web.Controllers
 {
-    /// <summary>
-    /// Controlador MVC para administrar el inventario de productos.
-    /// Corresponde a la capa "Vistas" del diagrama.
-    /// </summary>
+    /* Controlador MVC para administrar el inventario de productos.
+       Corresponde a la capa "Vistas" del diagrama. */
     public class ProductosController : Controller
     {
         private readonly IProductoService _productoService;
@@ -27,11 +45,9 @@ namespace POS_FeriaUniversitaria.Web.Controllers
             var productos = _productoService.ObtenerTodos();
             return View(productos);
         }
-
-        /// <summary>
-        /// Muestra el historial de productos (activos + eliminados recientes).
-        /// </summary>
-        public ActionResult Historial()          // NUEVO
+        
+        // Muestra el historial de productos (activos + eliminados recientes).
+        public ActionResult Historial()
         {
             var productos = _productoService.ObtenerHistorial();
             return View(productos);
@@ -51,7 +67,7 @@ namespace POS_FeriaUniversitaria.Web.Controllers
             // Validar el archivo si el usuario subió uno
             if (imagenPortada != null && imagenPortada.ContentLength > 0)
             {
-                const int maxBytes = 10 * 1024 * 1024; // 10 MB
+                const int maxBytes = 10 * 1024 * 1024; // 10 MB máximo
 
                 if (imagenPortada.ContentLength > maxBytes)
                 {
@@ -59,7 +75,7 @@ namespace POS_FeriaUniversitaria.Web.Controllers
                 }
                 else
                 {
-                    // Validar extensión básica (opcional, pero recomendable)
+                    // Validar extensión básica
                     var extension = Path.GetExtension(imagenPortada.FileName)?.ToLower();
                     string[] extensionesPermitidas = { ".jpg", ".jpeg", ".png", ".gif" };
 
@@ -123,7 +139,7 @@ namespace POS_FeriaUniversitaria.Web.Controllers
             // Validar archivo si subió uno nuevo
             if (imagenPortada != null && imagenPortada.ContentLength > 0)
             {
-                const int maxBytes = 10 * 1024 * 1024; // 10 MB
+                const int maxBytes = 10 * 1024 * 1024; // 10 MB máximo
 
                 if (imagenPortada.ContentLength > maxBytes)
                 {
@@ -167,8 +183,6 @@ namespace POS_FeriaUniversitaria.Web.Controllers
                 modelo.ImagenPortada = rutaVirtual;
             }
             // Si NO se sube archivo, se conservará el valor actual de ImagenPortada
-            // gracias al HiddenFor en la vista Edit (lo agregamos abajo).
-
             _productoService.Editar(modelo);
             return RedirectToAction("Index");
         }
@@ -192,13 +206,10 @@ namespace POS_FeriaUniversitaria.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        /// <summary>
-        /// Elimina definitivamente un producto desde el historial.
-        /// Esta acción solo se llama desde la vista Historial.
-        /// </summary>
+        // Elimina definitivamente un producto desde el historial. Esta acción solo se llama desde la vista Historial.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EliminarDefinitivo(int id)    // NUEVO
+        public ActionResult EliminarDefinitivo(int id)
         {
             _productoService.EliminarDefinitivo(id);
             return RedirectToAction("Historial");
@@ -206,7 +217,7 @@ namespace POS_FeriaUniversitaria.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Restaurar(int id)   // NUEVO
+        public ActionResult Restaurar(int id)
         {
             _productoService.Restaurar(id);
             return RedirectToAction("Historial");
