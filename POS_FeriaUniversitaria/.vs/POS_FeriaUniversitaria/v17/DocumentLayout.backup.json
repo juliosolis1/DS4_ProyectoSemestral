@@ -1,71 +1,12 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\jsass\\source\\repos\\POS_FeriaUniversitaria\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{2DE27D21-57DF-401E-835E-9412361C3852}|POS_FeriaUniversitaria\\POS_FeriaUniversitaria.csproj|c:\\users\\jsass\\source\\repos\\pos_feriauniversitaria\\pos_feriauniversitaria\\controllers\\api\\reportesapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DE27D21-57DF-401E-835E-9412361C3852}|POS_FeriaUniversitaria\\POS_FeriaUniversitaria.csproj|solutionrelative:pos_feriauniversitaria\\controllers\\api\\reportesapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2DE27D21-57DF-401E-835E-9412361C3852}|POS_FeriaUniversitaria\\POS_FeriaUniversitaria.csproj|c:\\users\\jsass\\source\\repos\\pos_feriauniversitaria\\pos_feriauniversitaria\\app_start\\routeconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2DE27D21-57DF-401E-835E-9412361C3852}|POS_FeriaUniversitaria\\POS_FeriaUniversitaria.csproj|solutionrelative:pos_feriauniversitaria\\app_start\\routeconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2DE27D21-57DF-401E-835E-9412361C3852}|POS_FeriaUniversitaria\\POS_FeriaUniversitaria.csproj|c:\\users\\jsass\\source\\repos\\pos_feriauniversitaria\\pos_feriauniversitaria\\views\\reportes\\diario.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2DE27D21-57DF-401E-835E-9412361C3852}|POS_FeriaUniversitaria\\POS_FeriaUniversitaria.csproj|solutionrelative:pos_feriauniversitaria\\views\\reportes\\diario.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": [
-        {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 2,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Diario.cshtml",
-              "DocumentMoniker": "C:\\Users\\jsass\\source\\repos\\POS_FeriaUniversitaria\\POS_FeriaUniversitaria\\Views\\Reportes\\Diario.cshtml",
-              "RelativeDocumentMoniker": "POS_FeriaUniversitaria\\Views\\Reportes\\Diario.cshtml",
-              "ToolTip": "C:\\Users\\jsass\\source\\repos\\POS_FeriaUniversitaria\\POS_FeriaUniversitaria\\Views\\Reportes\\Diario.cshtml",
-              "RelativeToolTip": "POS_FeriaUniversitaria\\Views\\Reportes\\Diario.cshtml",
-              "ViewState": "AgIAAAUBAAAAAAAAAAAAACEBAAAVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-13T03:52:23.542Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "RouteConfig.cs",
-              "DocumentMoniker": "C:\\Users\\jsass\\source\\repos\\POS_FeriaUniversitaria\\POS_FeriaUniversitaria\\App_Start\\RouteConfig.cs",
-              "RelativeDocumentMoniker": "POS_FeriaUniversitaria\\App_Start\\RouteConfig.cs",
-              "ToolTip": "C:\\Users\\jsass\\source\\repos\\POS_FeriaUniversitaria\\POS_FeriaUniversitaria\\App_Start\\RouteConfig.cs",
-              "RelativeToolTip": "POS_FeriaUniversitaria\\App_Start\\RouteConfig.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAyAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-13T03:50:56.862Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ReportesApiController.cs",
-              "DocumentMoniker": "C:\\Users\\jsass\\source\\repos\\POS_FeriaUniversitaria\\POS_FeriaUniversitaria\\Controllers\\API\\ReportesApiController.cs",
-              "RelativeDocumentMoniker": "POS_FeriaUniversitaria\\Controllers\\API\\ReportesApiController.cs",
-              "ToolTip": "C:\\Users\\jsass\\source\\repos\\POS_FeriaUniversitaria\\POS_FeriaUniversitaria\\Controllers\\API\\ReportesApiController.cs",
-              "RelativeToolTip": "POS_FeriaUniversitaria\\Controllers\\API\\ReportesApiController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUBAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-13T03:49:32.624Z",
-              "EditorCaption": ""
-            }
-          ]
-        }
-      ]
+      "DocumentGroups": []
     }
   ]
 }
